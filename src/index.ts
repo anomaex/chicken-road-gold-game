@@ -1,5 +1,5 @@
 //
-// src/main.ts
+// src/index.ts
 //
 
 import { Application, Container, Assets } from "pixi.js";
@@ -17,7 +17,7 @@ import { initResizeHandler } from "./systems/resize";
 import { updateCamera, moveCameraTo } from "./systems/camera";
 import { initInput } from "./systems/input";
 
-import "./styles/main.css";
+import "./styles/index.css";
 
 function buildLevel() {
   const start = new Start();
@@ -53,7 +53,7 @@ function buildLevel() {
 async function bootstrap() {
   store.app = new Application();
   await store.app.init({
-    //resizeTo: window, // pixijs auto resize to window
+    //resizeTo: window, // pixijs auto resize to window, upd: not needed, we auto resize every game tick
     resolution: window.devicePixelRatio || 1,
     autoDensity: true,
   });
