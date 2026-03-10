@@ -24,59 +24,58 @@ export class Chicken extends Container {
     this.x = store.chickenStartPoint.x;
     this.y = store.chickenStartPoint.y;
 
-    const texture = Assets.get("chickenStatic");
-    const sprite = new Sprite(texture);
-    sprite.anchor.set(0.5, 0.6);
+    new Sprite({
+      texture: Assets.get("chickenStatic"),
+      anchor: {x: 0.5, y: 0.6},
+      parent: this
+    });
 
     this.zIndex = 2;
-
-    this.addChild(sprite);
 
     this.addScore();
   }
 
   private addScore() {
-    this.scoreContainer = new Container();
-    this.scoreContainer.visible = false;
-
-    this.scoreContainer.x = -10;
-    this.scoreContainer.y = 66;
-
-    const scoreTex = Assets.get("chickenScore");
-    const scoreSprite = new Sprite(scoreTex);
-    scoreSprite.anchor.set(0.5, 0);
-    this.scoreContainer.addChild(scoreSprite);
-
-    const textStyle = new TextStyle({
-      fontFamily: "Arial",
-      fontSize: 30,
-      fontWeight: "bold",
-      fill: "#ffffff",
-      dropShadow: {
-        color: "#000000",
-        angle: 90,
-        distance: 2,
-      },
-    });
     this.scoreText = new Text({
       text: "0.0x",
-      style: textStyle,
+      style: new TextStyle({
+        fontFamily: "Arial",
+        fontSize: 30,
+        fontWeight: "bold",
+        fill: "#ffffff",
+        dropShadow: {
+          color: "#000000",
+          angle: 90,
+          distance: 2,
+        },
+      }),
       y: 26,
       x: 4,
+      anchor: {x: 0.5, y: 0}
     });
-    this.scoreText.anchor.set(0.5, 0);
-    this.scoreContainer.addChild(this.scoreText);
-
-    this.addChild(this.scoreContainer);
+    this.scoreContainer = new Container({
+      x: -10,
+      y: 66,
+      visible: false,
+      children: [
+        new Sprite({
+          texture: Assets.get("chickenScore"),
+          anchor: { x: 0.5, y: 0},
+          parent: this.scoreContainer
+        }),
+        this.scoreText
+      ],
+      parent: this
+    });
   }
 
-  private showScore() {
-    this.scoreText.text = `${this.scoreMulti}x`;
-    this.scoreContainer.visible = true;
-  }
-
-  private hideScore() {
-    this.scoreContainer.visible = false;
+  private visibleScore(show: boolean) {
+    if (show) {
+      this.scoreText.text = `${this.scoreMulti}x`;
+      this.scoreContainer.visible = true;
+    } else {
+      this.scoreContainer.visible = false;
+    }
   }
 
   //#region Jump
@@ -88,7 +87,7 @@ export class Chicken extends Container {
         this.nextRoadIndex <= store.bg.roads.length)
     ) {
       const nextRoad = store.bg.roads[this.nextRoadIndex];
-      nextRoad.lightOnScore(); // turn on light on text score
+      nextRoad.backlightScore(true); // turn on backlight on text score
     }
   }
 
@@ -103,14 +102,14 @@ export class Chicken extends Container {
     const currentRoad = store.bg.roads[this.currentRoadIndex];
     const nextRoad = store.bg.roads[this.nextRoadIndex];
 
-    const pathPoint = nextRoad.getPathPoint();
+    const jumpPoint = nextRoad.getJumpPoint();
 
     new Tween(this, store.tweenGroup)
-      .to(pathPoint, 350)
+      .to(jumpPoint, 350)
       .easing(Easing.Quadratic.Out)
       .onStart(() => {
-        this.hideScore();
-        moveCameraTo(pathPoint.x + 50, pathPoint.y);
+        this.visibleScore(false);
+        moveCameraTo(jumpPoint.x + 50, jumpPoint.y);
         nextRoad.chickenIn();
       })
       .onComplete(() => {
@@ -130,7 +129,7 @@ export class Chicken extends Container {
           nextRoad.chickenOut();
           this.moveToFinish();
         } else {
-          this.showScore();
+          this.visibleScore(true);
           this.preJump();
           store.input.block = false;
         }
@@ -141,7 +140,7 @@ export class Chicken extends Container {
 
   //#region Finish
   private moveToFinish() {
-    const point = store.bg.finish.getFinishPathPoint();
+    const point = store.bg.finish.getFinishPoint();
 
     new Tween(this, store.tweenGroup)
       .to(point, 350)
@@ -158,7 +157,7 @@ export class Chicken extends Container {
   }
 
   private jumpToGold() {
-    const point = store.bg.finish.getGoldPathPoint();
+    const point = store.bg.finish.getGoldPoint();
 
     new Tween(this, store.tweenGroup)
       .to(point, 350)

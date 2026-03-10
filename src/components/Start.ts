@@ -5,18 +5,15 @@
 import { Container, Sprite, Assets } from "pixi.js";
 
 export class Start extends Container {
-  constructor(x: number = 0, y: number = 0) {
+  constructor() {
     super();
 
-    this.x = x;
-    this.y = y;
-
-    const texture = Assets.get("bgStart");
-    const sprite = new Sprite(texture);
-    sprite.anchor.set(0, 0);
+    new Sprite({
+      texture: Assets.get("bgStart"),
+      anchor: {x: 0, y: 0},
+      parent: this
+    });
 
     this.zIndex = 1;
-
-    this.addChild(sprite);
   }
 }

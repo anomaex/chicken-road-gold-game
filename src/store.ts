@@ -47,7 +47,7 @@ class GameStore {
   };
 
   public chickenStartPoint = {
-    // in worldContainer coords
+    // In worldContainer coords
     x: 218,
     y: 894,
   };

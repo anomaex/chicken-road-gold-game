@@ -11,100 +11,107 @@ import { checkCollision } from "../systems/collision";
 import { store } from "../store";
 
 export class Road extends Container {
-  private pathContainer!: Container;
-
   private coinBronzeContainer!: Container;
   private scoreText!: Text;
 
   private coinGoldSprite!: Sprite;
   private fencingSprite!: Sprite;
-
-  private fencingCoords = { x: -4, y: -130 };
-  private fencingOffsetX = 250;
+  private fencingOffsetY: number = 130;
 
   private scoreMultiplier: number = 0;
 
   private activeCar: Sprite | null = null;
   private spawnCarTimer: number = 0;
   private nextSpawnCarTime: number = 1000;
+  private carStop: boolean = false;
+  private carSpeed: number = 8;
 
-  constructor(id: number, x: number = 0, y: number = 0) {
+  constructor(id: number, x: number = 0) {
     super();
 
     this.x = x;
-    this.y = y;
 
-    const texture = Assets.get("bgRoad");
-    const sprite = new Sprite(texture);
-    sprite.anchor.set(0, 0);
+    new Sprite({
+      texture: Assets.get("bgRoad"),
+      anchor: {x: 0, y: 0},
+      parent: this
+    });
 
-    this.addChild(sprite);
+    this.scoreMultiplier = calculateMultiplier(id + 1);
 
-    this.addGameObjects();
-
-    const multi = calculateMultiplier(id + 1);
-    this.setScoreMult(multi);
+    this.addObjects();
 
     this.nextSpawnCarTime = this.calcNexSpawnTime();
   }
 
-  private addGameObjects() {
-    this.pathContainer = new Container();
-    this.addChild(this.pathContainer);
-    this.pathContainer.x = this.width / 2;
-    this.pathContainer.y = store.chickenStartPoint.y;
-
-    this.coinBronzeContainer = new Container();
-    const coinBronzeTex = Assets.get("coinBronze");
-    const coinBronzeSprite = new Sprite(coinBronzeTex);
-    coinBronzeSprite.anchor.set(0.5, 0.5);
-    this.coinBronzeContainer.addChild(coinBronzeSprite);
-    const textStyle = new TextStyle({
-      fontFamily: "Arial",
-      fontSize: 34,
-      fontWeight: "bold",
-      fill: "#fff5de",
-      stroke: {
-        width: 4,
-        color: "#a8742f",
-      },
-      dropShadow: {
-        color: "#000000",
-        angle: 90,
-        distance: 2,
-      },
-    });
+  private addObjects() {
+    const centerX = this.width / 2;
+    
+    // Multi score on bronze coin and in bronzeOntainer
     this.scoreText = new Text({
-      text: `${this.scoreMultiplier}x`,
-      style: textStyle,
+      style: new TextStyle({
+        fontFamily: "Arial",
+        fontSize: 34,
+        fontWeight: "bold",
+        fill: "#fff5de",
+        stroke: {
+          width: 4,
+          color: "#a8742f",
+        },
+        dropShadow: {
+          color: "#000000",
+          angle: 90,
+          distance: 2,
+        },
+      }),
       y: -2,
       alpha: 0.7,
+      text: `${this.scoreMultiplier}x`,
+      anchor: {x: 0.5, y: 0.5}
     });
-    this.scoreText.anchor.set(0.5, 0.5);
-    this.coinBronzeContainer.addChild(this.scoreText);
-    this.pathContainer.addChild(this.coinBronzeContainer);
 
-    const coinGoldTex = Assets.get("coinGold");
-    this.coinGoldSprite = new Sprite(coinGoldTex);
-    this.coinGoldSprite.anchor.set(0.5, 0.5);
-    this.coinGoldSprite.scale.x = 0;
-    this.coinGoldSprite.visible = false;
-    this.pathContainer.addChild(this.coinGoldSprite);
+    // Bronze coin
+    this.coinBronzeContainer = new Container({
+      x: centerX,
+      y: store.chickenStartPoint.y,
+      parent: this,
+      children: [
+        new Sprite({
+          texture: Assets.get("coinBronze"),
+          anchor: {x: 0.5, y: 0.5},
+          parent: this.coinBronzeContainer
+        }),
+        this.scoreText
+      ]
+    });
 
-    const fencingTex = Assets.get("fencing");
-    this.fencingSprite = new Sprite(fencingTex);
-    this.fencingSprite.anchor.set(0.5, 0.5);
-    this.fencingSprite.x = this.fencingCoords.x;
-    this.fencingSprite.y = this.fencingCoords.y - this.fencingOffsetX;
-    this.fencingSprite.alpha = 0;
-    this.fencingSprite.visible = false;
-    this.pathContainer.addChild(this.fencingSprite);
+    // Gold coint
+    this.coinGoldSprite = new Sprite({
+      texture: Assets.get("coinGold"),
+      anchor: {x: 0.5, y: 0.5},
+      x: centerX,
+      y: store.chickenStartPoint.y,
+      scale: {x: 0, y: 1},
+      visible: false,
+      parent: this
+    });
+
+    // Fencing
+    this.fencingSprite = new Sprite({
+      texture: Assets.get("fencing"),
+      anchor: {x: 0.5, y: 0.5},
+      x: centerX,
+      y: store.chickenStartPoint.y - (this.fencingOffsetY * 3),
+      alpha: 0,
+      visible: false,
+      parent: this
+    });
   }
 
-  public getPathPoint() {
+  public getJumpPoint() {
     return {
-      x: this.x + this.pathContainer.x,
-      y: this.y + this.pathContainer.y,
+      x: this.x + (this.width / 2),
+      y: store.chickenStartPoint.y,
     };
   }
 
@@ -138,7 +145,7 @@ export class Road extends Container {
       .start();
 
     new Tween(this.fencingSprite, store.tweenGroup)
-      .to({ x: this.fencingCoords.x, y: this.fencingCoords.y }, 175)
+      .to({ y: store.chickenStartPoint.y - this.fencingOffsetY }, 175)
       .easing(Easing.Quadratic.In)
       .onStart(() => {
         this.fencingSprite.visible = true;
@@ -146,12 +153,11 @@ export class Road extends Container {
       .start();
   }
 
-  public lightOnScore() {
-    this.scoreText.alpha = 1;
-  }
-
-  private lightOffScore() {
-    this.scoreText.alpha = 0.7;
+  public backlightScore(enable: boolean = false) {
+    if (enable)
+      this.scoreText.alpha = 1;
+    else
+      this.scoreText.alpha = 0.7;
   }
 
   public getScoreMulti() {
@@ -173,7 +179,7 @@ export class Road extends Container {
   }
 
   public chickenOut() {
-    this.lightOffScore();
+    this.backlightScore(true);
     this.showCoinGold();
   }
 
@@ -184,11 +190,11 @@ export class Road extends Container {
     const id = Math.floor(Math.random() * 4);
 
     this.activeCar = Sprite.from(`car_${id}`);
-    this.activeCar.anchor.set(0.5, 0);
+    this.activeCar.anchor.set(0.5, 1);
 
     this.activeCar.x = this.width / 2;
     this.activeCar.y =
-      this.toLocal({ x: 0, y: 0 }).y - this.activeCar.height - 10;
+      this.toLocal({ x: 0, y: 0 }).y  - 10;
     this.addChild(this.activeCar);
   }
 
@@ -204,16 +210,32 @@ export class Road extends Container {
     }
 
     const car = this.activeCar;
-    car.y += 8; // car speed, change if needed
+
+    // Check fencing for stop car upper fencing
+    if (car.y < this.y) {
+      if (this.fencingSprite.visible) {
+        if (!this.carStop) {
+          this.carStop = true;
+        }
+      }
+
+    }
+
+    if (this.carStop) {
+      const distance = Math.abs(car.y - this.y);
+      if (distance < 5)
+        console.log("asdas");
+      return;
+    }
+
+    car.y += this.carSpeed; // car speed, change if needed
 
     if (checkCollision(car)) {
         this.onChickenHit();
     }
 
-    console.log(store.worldContainer.height + 10)
     // If car is already run to out for world
-    if (car.y > (store.level.height + 10)) { 
-      console.log("removed");
+    if (car.y > (store.level.height + this.activeCar.height + 10)) { 
       this.removeActiveCar();
       // После удаления задаем рандомную паузу до появления следующей машины
       this.nextSpawnCarTime = this.calcNexSpawnTime();
