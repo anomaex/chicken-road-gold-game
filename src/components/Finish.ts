@@ -13,8 +13,8 @@ export class Finish extends Container {
 
     new Sprite({
       texture: Assets.get("bgFinish"),
-      anchor: {x: 0, y: 0},
-      parent: this
+      anchor: { x: 0, y: 0 },
+      parent: this,
     });
 
     this.zIndex = 1;
@@ -25,10 +25,10 @@ export class Finish extends Container {
   public addDecoration() {
     new Sprite({
       texture: Assets.get("springBoard"),
-      anchor: {x: 0, y: 0.5},
+      anchor: { x: 0, y: 0.5 },
       x: 0,
       y: 887,
-      parent: this
+      parent: this,
     });
   }
 

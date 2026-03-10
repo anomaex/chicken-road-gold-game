@@ -6,7 +6,7 @@ import { Sprite } from "pixi.js";
 
 import { store } from "../store";
 
-export function checkCollision(car: Sprite): boolean {
+export function checkCarToChickenCollision(car: Sprite): boolean {
   if (!store.chicken) return false;
 
   const carBounds = car.getBounds();

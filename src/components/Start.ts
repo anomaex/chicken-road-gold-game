@@ -10,8 +10,8 @@ export class Start extends Container {
 
     new Sprite({
       texture: Assets.get("bgStart"),
-      anchor: {x: 0, y: 0},
-      parent: this
+      anchor: { x: 0, y: 0 },
+      parent: this,
     });
 
     this.zIndex = 1;

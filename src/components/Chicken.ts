@@ -26,8 +26,8 @@ export class Chicken extends Container {
 
     new Sprite({
       texture: Assets.get("chickenStatic"),
-      anchor: {x: 0.5, y: 0.6},
-      parent: this
+      anchor: { x: 0.5, y: 0.6 },
+      parent: this,
     });
 
     this.zIndex = 2;
@@ -51,7 +51,7 @@ export class Chicken extends Container {
       }),
       y: 26,
       x: 4,
-      anchor: {x: 0.5, y: 0}
+      anchor: { x: 0.5, y: 0 },
     });
     this.scoreContainer = new Container({
       x: -10,
@@ -60,12 +60,12 @@ export class Chicken extends Container {
       children: [
         new Sprite({
           texture: Assets.get("chickenScore"),
-          anchor: { x: 0.5, y: 0},
-          parent: this.scoreContainer
+          anchor: { x: 0.5, y: 0 },
+          parent: this.scoreContainer,
         }),
-        this.scoreText
+        this.scoreText,
       ],
-      parent: this
+      parent: this,
     });
   }
 
@@ -108,12 +108,14 @@ export class Chicken extends Container {
       .to(jumpPoint, 350)
       .easing(Easing.Quadratic.Out)
       .onStart(() => {
+
         this.visibleScore(false);
         moveCameraTo(jumpPoint.x + 50, jumpPoint.y);
         nextRoad.chickenIn();
+
       })
       .onComplete(() => {
-        // For skip start if -1
+        // For skip start chicken point, if -1
         if (this.currentRoadIndex > -1) {
           currentRoad.chickenOut();
         }
