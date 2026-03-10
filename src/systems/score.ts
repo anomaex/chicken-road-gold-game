@@ -1,5 +1,5 @@
 //
-// src/score.ts
+// src/systems/score.ts
 //
 
 export function calculateMultiplier(jump: number): number {

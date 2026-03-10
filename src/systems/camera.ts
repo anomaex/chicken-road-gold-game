@@ -39,7 +39,7 @@ export function updateCamera() {
   store.camera.centerY = (sh / 2 - store.worldContainer.y) / scale;
 }
 
-export function moveCameraTo(x: number, y: number, duration: number = 500) {
+export function moveCameraTo(x: number, y: number, duration: number = 800) {
   new Tween(store.camera, store.tweenGroup)
     .to({ centerX: x, centerY: y }, duration)
     .easing(Easing.Quadratic.Out)

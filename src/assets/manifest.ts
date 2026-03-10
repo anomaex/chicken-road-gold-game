@@ -8,6 +8,8 @@ import bgStartImg from "./images/bg/bgStart.png";
 import bgRoadImg from "./images/bg/bgRoad.png";
 import bgFinishImg from "./images/bg/bgFinish.png";
 
+import springBoardImg from "./images/bg/decorations/springBoard.png";
+
 import chickenStaticImg from "./images/chicken/chickenStatic.png";
 import chickenScoreImg from "./images/chicken/chickenScore.png";
 
@@ -15,7 +17,10 @@ import coinBronzeImg from "./images/road/coinBronze.png";
 import coinGoldImg from "./images/road/coinGold.png";
 import fencingImg from "./images/road/fencing.png";
 
-import springBoardImg from "./images/decoration/springBoard.png";
+import car0Img from "./images/road/cars/car_0.png";
+import car1Img from "./images/road/cars/car_1.png";
+import car2Img from "./images/road/cars/car_2.png";
+import car3Img from "./images/road/cars/car_3.png";
 
 export const manifest: AssetsManifest = {
   bundles: [
@@ -40,10 +45,14 @@ export const manifest: AssetsManifest = {
         { alias: "coinBronze", src: coinBronzeImg },
         { alias: "coinGold", src: coinGoldImg },
         { alias: "fencing", src: fencingImg },
+        { alias: "car_0", src: car0Img },
+        { alias: "car_1", src: car1Img },
+        { alias: "car_2", src: car2Img },
+        { alias: "car_3", src: car3Img },
       ],
     },
     {
-      name: "decoration",
+      name: "decorations",
       assets: [{ alias: "springBoard", src: springBoardImg }],
     },
   ],

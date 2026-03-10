@@ -6,6 +6,7 @@ import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
 
 import { calculateMultiplier } from "../systems/score";
+import { checkCollision } from "../systems/collision";
 
 import { store } from "../store";
 
@@ -23,6 +24,10 @@ export class Road extends Container {
 
   private scoreMultiplier: number = 0;
 
+  private activeCar: Sprite | null = null;
+  private spawnCarTimer: number = 0;
+  private nextSpawnCarTime: number = 1000;
+
   constructor(id: number, x: number = 0, y: number = 0) {
     super();
 
@@ -39,6 +44,8 @@ export class Road extends Container {
 
     const multi = calculateMultiplier(id + 1);
     this.setScoreMult(multi);
+
+    this.nextSpawnCarTime = this.calcNexSpawnTime();
   }
 
   private addGameObjects() {
@@ -130,7 +137,6 @@ export class Road extends Container {
       })
       .start();
 
-    //this.fencingSprite.y = this.pathContainer.toLocal({ x: 0, y: 0}).y; // recalc camera top coord relative to worldContainer
     new Tween(this.fencingSprite, store.tweenGroup)
       .to({ x: this.fencingCoords.x, y: this.fencingCoords.y }, 175)
       .easing(Easing.Quadratic.In)
@@ -170,4 +176,64 @@ export class Road extends Container {
     this.lightOffScore();
     this.showCoinGold();
   }
+
+  //#region Car
+  private spawnCar() {
+    this.removeActiveCar();
+
+    const id = Math.floor(Math.random() * 4);
+
+    this.activeCar = Sprite.from(`car_${id}`);
+    this.activeCar.anchor.set(0.5, 0);
+
+    this.activeCar.x = this.width / 2;
+    this.activeCar.y =
+      this.toLocal({ x: 0, y: 0 }).y - this.activeCar.height - 10;
+    this.addChild(this.activeCar);
+  }
+
+  public updateCar(dt: number) {
+    // If car is not present, calt the time for next spawn
+    if (!this.activeCar) {
+        this.spawnCarTimer += dt;
+        if (this.spawnCarTimer >= this.nextSpawnCarTime) {
+            this.spawnCar();
+            this.spawnCarTimer = 0;
+        }
+        return;
+    }
+
+    const car = this.activeCar;
+    car.y += 8; // car speed, change if needed
+
+    if (checkCollision(car)) {
+        this.onChickenHit();
+    }
+
+    console.log(store.worldContainer.height + 10)
+    // If car is already run to out for world
+    if (car.y > (store.level.height + 10)) { 
+      console.log("removed");
+      this.removeActiveCar();
+      // После удаления задаем рандомную паузу до появления следующей машины
+      this.nextSpawnCarTime = this.calcNexSpawnTime();
+    }
+  }
+
+  private onChickenHit() {
+    console.log("HIT");
+  }
+
+  private removeActiveCar() {
+    if (this.activeCar) {
+      this.activeCar.destroy();
+      this.activeCar = null;
+    }
+  }
+
+  private calcNexSpawnTime() {
+    const time = 1000 + Math.random() * 2000; 
+    return time;
+  }
+  //#endregion Car
 }

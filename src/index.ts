@@ -60,7 +60,7 @@ async function bootstrap() {
   document.getElementById("pixi-container")!.appendChild(store.app.canvas);
 
   await Assets.init({ manifest: manifest });
-  await Assets.loadBundle(["bg", "chicken", "road", "decoration"]); // pixijs load assets to self cache
+  await Assets.loadBundle(["bg", "chicken", "road", "decorations"]); // pixijs load assets to self cache
 
   store.worldContainer = new Container();
   store.app.stage.addChild(store.worldContainer);
@@ -72,9 +72,16 @@ async function bootstrap() {
 
   initResizeHandler();
 
-  store.app.ticker.add(() => {
+  store.app.ticker.add((ticker) => {
+    const dt = ticker.deltaMS;
+
+    store.bg.roads.forEach((road) => {
+      road.updateCar(dt);
+    });
+
     updateCamera();
-    store.tweenGroup.update();
+
+    store.tweenGroup.update(ticker.lastTime);
   });
 
   initInput();

@@ -28,7 +28,7 @@ class GameStore {
       easy: 3, // 30 default
       medium: 25, // 25
       hard: 22, // 22
-      hardcore: 18 // 18
+      hardcore: 18, // 18
     },
   };
 
@@ -46,7 +46,8 @@ class GameStore {
     block: false,
   };
 
-  public chickenStartPoint = { // in worldContainer coords
+  public chickenStartPoint = {
+    // in worldContainer coords
     x: 218,
     y: 894,
   };

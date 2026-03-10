@@ -82,8 +82,11 @@ export class Chicken extends Container {
   //#region Jump
   public preJump() {
     // On start point
-    if ((this.currentRoadIndex == -1 && this.nextRoadIndex == 0) 
-      || (this.currentRoadIndex >= 0 && this.nextRoadIndex <= store.bg.roads.length)) {
+    if (
+      (this.currentRoadIndex == -1 && this.nextRoadIndex == 0) ||
+      (this.currentRoadIndex >= 0 &&
+        this.nextRoadIndex <= store.bg.roads.length)
+    ) {
       const nextRoad = store.bg.roads[this.nextRoadIndex];
       nextRoad.lightOnScore(); // turn on light on text score
     }
@@ -91,31 +94,28 @@ export class Chicken extends Container {
 
   public jump() {
     store.input.block = true;
-    
+
     //
-    // Api server logic or else 
+    // Api server logic or else
     // if else
     //
 
     const currentRoad = store.bg.roads[this.currentRoadIndex];
     const nextRoad = store.bg.roads[this.nextRoadIndex];
 
-    const pathPoint = nextRoad.getPathPoint()
+    const pathPoint = nextRoad.getPathPoint();
 
     new Tween(this, store.tweenGroup)
       .to(pathPoint, 350)
       .easing(Easing.Quadratic.Out)
       .onStart(() => {
-
         this.hideScore();
         moveCameraTo(pathPoint.x + 50, pathPoint.y);
         nextRoad.chickenIn();
-        
       })
       .onComplete(() => {
-
         // For skip start if -1
-        if (this.currentRoadIndex > -1)  {
+        if (this.currentRoadIndex > -1) {
           currentRoad.chickenOut();
         }
 
@@ -130,17 +130,15 @@ export class Chicken extends Container {
           nextRoad.chickenOut();
           this.moveToFinish();
         } else {
-
-          this.showScore()
-          this.preJump()
+          this.showScore();
+          this.preJump();
           store.input.block = false;
         }
-
       })
       .start();
   }
   //#endregion Jump
-  
+
   //#region Finish
   private moveToFinish() {
     const point = store.bg.finish.getFinishPathPoint();
