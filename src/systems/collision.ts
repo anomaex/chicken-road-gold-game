@@ -4,7 +4,10 @@
 
 import { Sprite } from "pixi.js";
 
-export function checkCollision(chicken: Sprite | null, car: Sprite | null): boolean {
+export function checkCollision(
+  chicken: Sprite | null,
+  car: Sprite | null,
+): boolean {
   if (!chicken) return false;
   if (!car) return false;
 

@@ -39,7 +39,6 @@ export const manifest: AssetsManifest = {
         { alias: "chickenStatic", src: chickenStaticImg },
         { alias: "chickenScore", src: chickenScoreImg },
         { alias: "chickenRunOver", src: chickenRunOverImg },
-        
       ],
     },
     {

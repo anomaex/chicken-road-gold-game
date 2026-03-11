@@ -3,7 +3,7 @@
 //
 
 import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
-import { Tween, Easing, Group } from "@tweenjs/tween.js";
+import { Group } from "@tweenjs/tween.js";
 
 import { store } from "../store";
 import { moveCameraTo, shakeCameraX } from "../systems/camera";
@@ -13,7 +13,7 @@ export class Chicken extends Container {
     // In worldContainer coords
     x: 218,
     y: 894,
-    offsetY: 66 // for correct sprite position
+    offsetY: 66, // for correct sprite position
   };
 
   private scoreContainer!: Container;
@@ -112,14 +112,13 @@ export class Chicken extends Container {
     if (this.isFinish) return;
 
     if (this.isJump) {
-      
       if (this.x < this.jumpPositionX) {
         this.x += 1.15 * dt;
       }
 
       // Check collision
       this.checkCollision();
-      
+
       if (this.x >= this.jumpPositionX) {
         this.isJump = false;
 
@@ -131,7 +130,7 @@ export class Chicken extends Container {
           this.chickenStaticSprite.visible = false;
           this.chickenRunOverSprite.visible = true;
 
-          shakeCameraX(); // shake camera on collision hit 
+          shakeCameraX(); // shake camera on collision hit
 
           // Emulating restart
           setTimeout(() => {
@@ -148,7 +147,7 @@ export class Chicken extends Container {
 
         currentRoad.visibleFencing(true);
 
-        const nextRoadIndex = this.currentRoadIndex + 1; // need check what road next, after on road I jump 
+        const nextRoadIndex = this.currentRoadIndex + 1; // need check what road next, after on road I jump
         if (nextRoadIndex > store.bg.roads.length - 1) {
           // Run finish event
           this.isFinish = true;
@@ -158,14 +157,12 @@ export class Chicken extends Container {
           setTimeout(() => {
             this.restart();
           }, 1000);
-          
         } else {
           this.visibleScore(true);
         }
-        
+
         store.input.block = false;
       }
-
     }
   }
 
@@ -183,11 +180,11 @@ export class Chicken extends Container {
 
     const nextRoad = store.bg.roads[this.currentRoadIndex + 1];
     nextRoad.visibleCoinBronze(false);
-    
+
     this.visibleScore(false);
-        
+
     this.jumpPositionX = nextRoad.x + nextRoad.width / 2;
-    moveCameraTo(this.jumpPositionX + (this.width / 2), this.startPoint.y, 500);
+    moveCameraTo(this.jumpPositionX + this.width / 2, this.startPoint.y, 500);
 
     const currentRoad = store.bg.roads[this.currentRoadIndex];
     if (currentRoad) {
@@ -203,24 +200,21 @@ export class Chicken extends Container {
     const upY = currentRoad.fencingStopPointY; // in worldContainer coords
     const downY = this.y; // in worldContainer coords
 
-    const carFwdPointY = currentRoad.car.y // matches in worldContainer coords
+    const carFwdPointY = currentRoad.car.y; // matches in worldContainer coords
     const carCenterPointY = currentRoad.car.y - currentRoad.car.height / 2; // On high speed car need reduce 2 to 1.75 or 1.5 or 1.25
     //const carBackPointY = currentRoad.car.y - currentRoad.car.height;
 
     if (carFwdPointY >= upY && carFwdPointY <= downY) {
-      console.log("Hit forward")
       currentRoad.isStopSpawnCar = true;
       this.isCollisionHit = true;
     }
     if (carCenterPointY >= upY && carCenterPointY <= downY) {
-      console.log("Hit center")
       currentRoad.isStopSpawnCar = true;
       this.isCollisionHit = true;
     }
     /*if (carBackPointY >= upY && carBackPointY <= downY) {
-      console.log("HIT to back");
-      currentRoad.carStopped = true;
-      return true;
+      currentRoad.isStopSpawnCar = true;
+      this.isCollisionHit = true;
     }*/
   }
   //#endregion JUMP
@@ -231,7 +225,7 @@ export class Chicken extends Container {
     store.tweenGroup = new Group();
 
     // Roads first
-    store.bg.roads.forEach(e => {
+    store.bg.roads.forEach((e) => {
       e.restart();
     });
 
@@ -246,7 +240,7 @@ export class Chicken extends Container {
     this.currentRoadIndex = -1;
 
     moveCameraTo(this.startPoint.x, this.startPoint.y, 300);
-   
+
     this.isCollisionHit = false;
 
     this.isFinish = false;
@@ -255,41 +249,4 @@ export class Chicken extends Container {
 
     store.input.block = false;
   }
-
-    //#region Finish
-  private moveToFinish() {
-    const point = store.bg.finish.getFinishPoint();
-
-    new Tween(this, store.tweenGroup)
-      .to(point, 350)
-      .easing(Easing.Quadratic.InOut)
-      .onStart(() => {
-        moveCameraTo(point.x, point.y, 800);
-      })
-      .onComplete(() => {
-        setTimeout(() => {
-          this.jumpToGold();
-        }, 300);
-      })
-      .start();
-  }
-
-  private jumpToGold() {
-    const point = store.bg.finish.getGoldPoint();
-
-    new Tween(this, store.tweenGroup)
-      .to(point, 350)
-      .easing(Easing.Quadratic.InOut)
-      .onStart(() => {
-        moveCameraTo(point.x, point.y, 800);
-      })
-      .onComplete(() => {
-        // Imitation restart
-        setTimeout(() => {
-          this.restart();
-        }, 1000);
-      })
-      .start();
-  }
-  //#endregion Finish
 }

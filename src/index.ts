@@ -3,7 +3,6 @@
 //
 
 import { Application, Container, Assets } from "pixi.js";
-import { initDevtools } from '@pixi/devtools';
 
 import { manifest } from "./assets/manifest";
 import { store } from "./store";
@@ -90,7 +89,7 @@ async function bootstrap() {
   initInput();
 
   if (import.meta.env.DEV) {
-    initDevtools({ app });
+    globalThis.__PIXI_APP__ = app;
   }
 }
 

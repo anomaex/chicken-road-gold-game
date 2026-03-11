@@ -43,8 +43,7 @@ export class Road extends Container {
 
     this.addObjects();
 
-    if (this.id == 0)
-      this.setBacklightScore(true);
+    if (this.id == 0) this.setBacklightScore(true);
   }
 
   private addObjects() {
@@ -110,7 +109,10 @@ export class Road extends Container {
       parent: this,
       zIndex: 1,
     });
-    this.fencingStopPointY = store.chicken.startPoint.y - this.fencingOffsetY - this.fencingSprite.height;
+    this.fencingStopPointY =
+      store.chicken.startPoint.y -
+      this.fencingOffsetY -
+      this.fencingSprite.height;
   }
 
   //#region Helpers
@@ -131,7 +133,7 @@ export class Road extends Container {
 
   public visibleCoinGold(enable: boolean) {
     if (enable) {
-       setTimeout(() => {
+      setTimeout(() => {
         this.coinGoldSprite.visible = true;
         new Tween(this.coinGoldSprite.scale, store.tweenGroup)
           .to({ x: 1 }, 150)
@@ -167,7 +169,8 @@ export class Road extends Container {
     } else {
       this.fencingSprite.visible = false;
       this.fencingSprite.alpha = 0;
-      this.fencingSprite.y = store.chicken.startPoint.y - this.fencingOffsetY * 5;
+      this.fencingSprite.y =
+        store.chicken.startPoint.y - this.fencingOffsetY * 5;
     }
   }
   //#endregion Helpers
@@ -175,12 +178,12 @@ export class Road extends Container {
   public update(dt: number) {
     if (this.car) {
       if (this.fencingSprite.visible) {
-          if (this.car.y <= this.fencingStopPointY) {
-            new Tween(this.car, store.tweenGroup)
-              .to({ y: this.fencingStopPointY }, 200)
-              .easing(Easing.Quadratic.Out) 
-              .start();
-            return;
+        if (this.car.y <= this.fencingStopPointY) {
+          new Tween(this.car, store.tweenGroup)
+            .to({ y: this.fencingStopPointY }, 200)
+            .easing(Easing.Quadratic.Out)
+            .start();
+          return;
         }
       }
       this.car.y += 1.5 * dt;
@@ -231,10 +234,8 @@ export class Road extends Container {
 
   public restart() {
     this.removeCar();
-    if (this.id == 0)
-      this.setBacklightScore(true);
-    else
-      this.setBacklightScore(false);
+    if (this.id == 0) this.setBacklightScore(true);
+    else this.setBacklightScore(false);
     this.visibleCoinGold(false);
     this.visibleCoinBronze(true);
     this.visibleFencing(false);

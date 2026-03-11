@@ -60,10 +60,10 @@ class GameStore {
   public ui = {
     fontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
     colors: {
-        primary: '#fff5e6',
-        inActive: '#a8742f',
-    }
-  }
+      primary: "#fff5e6",
+      inActive: "#a8742f",
+    },
+  };
 }
 
 export const store = new GameStore();
