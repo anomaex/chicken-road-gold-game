@@ -6,7 +6,6 @@ import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
 
 import { calculateMultiplier } from "../systems/score";
-import { checkCarToChickenCollision } from "../systems/collision";
 
 import { store } from "../store";
 
@@ -16,14 +15,16 @@ export class Road extends Container {
 
   private coinGoldSprite!: Sprite;
   private fencingSprite!: Sprite;
-  private fencingOffsetY: number = 85;
+  private fencingOffsetY = 85;
 
-  private scoreMultiplier: number = 0;
+  private scoreMulti = 0;
 
-  private activeCar: Sprite | null = null;
-  private spawnCarTimer: number = 0;
-  private nextSpawnCarTime: number = 1000;
-  private activeCarStopped: boolean = false;
+  public car: Sprite | null = null;
+  private spawnCarTimer = 0;
+  private nextSpawnCarTime = 0;
+  private endMoveCarPointY!: number;
+  public fencingStopPointY!: number;
+  public isStopSpawnCar = false;
 
   constructor(id: number, x: number = 0) {
     super();
@@ -36,11 +37,9 @@ export class Road extends Container {
       parent: this,
     });
 
-    this.scoreMultiplier = calculateMultiplier(id + 1);
+    this.scoreMulti = calculateMultiplier(id + 1);
 
     this.addObjects();
-
-    this.nextSpawnCarTime = this.calcNexSpawnTime(0);
   }
 
   private addObjects() {
@@ -49,10 +48,10 @@ export class Road extends Container {
     // Multi score on bronze coin and in bronzeOntainer
     this.scoreText = new Text({
       style: new TextStyle({
-        fontFamily: "Arial",
+        fontFamily: store.ui.fontStack,
         fontSize: 34,
         fontWeight: "bold",
-        fill: "#fff5de",
+        fill: store.ui.colors.primary,
         stroke: {
           width: 4,
           color: "#a8742f",
@@ -65,14 +64,14 @@ export class Road extends Container {
       }),
       y: -2,
       alpha: 0.7,
-      text: `${this.scoreMultiplier}x`,
+      text: `${this.scoreMulti}x`,
       anchor: { x: 0.5, y: 0.5 },
     });
 
     // Bronze coin
     this.coinBronzeContainer = new Container({
       x: centerX,
-      y: store.chickenStartPoint.y,
+      y: store.chicken.startPoint.y,
       parent: this,
       children: [
         new Sprite({
@@ -89,7 +88,7 @@ export class Road extends Container {
       texture: Assets.get("coinGold"),
       anchor: { x: 0.5, y: 0.5 },
       x: centerX,
-      y: store.chickenStartPoint.y,
+      y: store.chicken.startPoint.y,
       scale: { x: 0, y: 1 },
       visible: false,
       parent: this,
@@ -100,178 +99,122 @@ export class Road extends Container {
       texture: Assets.get("fencing"),
       anchor: { x: 0.5, y: 1 },
       x: centerX,
-      y: store.chickenStartPoint.y - this.fencingOffsetY * 5,
+      y: store.chicken.startPoint.y - this.fencingOffsetY * 5,
       alpha: 0,
       visible: false,
       parent: this,
-      zIndex: 1
+      zIndex: 1,
     });
+    this.fencingStopPointY = store.chicken.startPoint.y - this.fencingOffsetY - this.fencingSprite.height;
   }
 
-  public getJumpPoint() {
-    return {
-      x: this.x + this.width / 2,
-      y: store.chickenStartPoint.y,
-    };
-  }
-
-  private hideCoinBronze() {
-    new Tween(this.coinBronzeContainer.scale, store.tweenGroup)
-      .to({ x: 0 }, 225)
-      .easing(Easing.Linear.None)
-      .onComplete(() => {
-        this.coinBronzeContainer.visible = false;
-      })
-      .start();
-  }
-
-  private showCoinGold() {
-    new Tween(this.coinGoldSprite.scale, store.tweenGroup)
-      .to({ x: 1 }, 150)
-      .easing(Easing.Linear.None)
-      .onStart(() => {
-        this.coinGoldSprite.visible = true;
-      })
-      .start();
-  }
-
-  private showFencing() {
-    // Need to check, if car under fencing position set timeout, show fencing after car moved
-    let duration = 0;     
-    if (this.activeCar) {
-      const distance = Math.abs((store.chickenStartPoint.y - this.fencingOffsetY) - this.activeCar.y)
-      if (distance < (this.activeCar.height / 2))
-        duration = 200;
-    }
-
-    setTimeout(() => {
-      new Tween(this.fencingSprite, store.tweenGroup)
-        .to({ alpha: 1 }, 175)
+  //#region Helpers
+  public visibleCoinBronze(enable: boolean) {
+    if (enable) {
+      this.coinBronzeContainer.scale.set(1, 1);
+      this.coinBronzeContainer.visible = true;
+    } else {
+      new Tween(this.coinBronzeContainer.scale, store.tweenGroup)
+        .to({ x: 0 }, 225)
         .easing(Easing.Linear.None)
-        .onStart(() => {
-          this.fencingSprite.visible = true;
+        .onComplete(() => {
+          this.coinBronzeContainer.visible = false;
         })
         .start();
-
-      new Tween(this.fencingSprite, store.tweenGroup)
-        .to({ y: store.chickenStartPoint.y - this.fencingOffsetY }, 175)
-        .easing(Easing.Quadratic.In)
-        .onStart(() => {
-          this.fencingSprite.visible = true;
-        })
-        .start();
-    }, duration);
+    }
   }
 
-  public backlightScore(enable: boolean = false) {
+  public visibleCoinGold(enable: boolean) {
+    if (enable) {
+       setTimeout(() => {
+        this.coinGoldSprite.visible = true;
+        new Tween(this.coinGoldSprite.scale, store.tweenGroup)
+          .to({ x: 1 }, 150)
+          .easing(Easing.Linear.None)
+          .start();
+      }, 200);
+    } else {
+      this.coinGoldSprite.visible = false;
+      this.coinGoldSprite.scale.set(1, 1);
+    }
+  }
+
+  public getScoreMulti() {
+    return this.scoreMulti;
+  }
+
+  public setBacklightScore(enable: boolean) {
     if (enable) this.scoreText.alpha = 1;
     else this.scoreText.alpha = 0.7;
   }
 
-  public getScoreMulti() {
-    return this.scoreMultiplier;
-  }
-
-  public setScoreMult(num: number) {
-    this.scoreMultiplier = num;
-    this.scoreText.text = `${this.scoreMultiplier}x`;
-  }
-
-  public chickenIn() {
-    this.hideCoinBronze();
-    //
-    // Here logic for car
-    // if else
-    //
-    this.showFencing();
-  }
-
-  public chickenOut() {
-    this.backlightScore(true);
-    this.showCoinGold();
-  }
-
-  //#region Car
-  private spawnCar() {
-    this.removeActiveCar();
-
-    if (this.fencingSprite.visible) return;
-
-    const id = Math.floor(Math.random() * 4); // 4 it's count of cars
-
-    const car = new Sprite({
-      texture: Assets.get(`car_${id}`),
-      anchor: {x: 0.5, y: 1},
-      x: this.width / 2,
-      y: this.toLocal({ x: 0, y: 0 }).y - 5,
-      parent: this
-    });
-    this.activeCar = car;
-
-    const pointY = store.level.height + this.activeCar.height + 5;
-
-    // Base 500 + (scatter 1500) = range [500, 1500]
-    const duration = 500 + (Math.random() * 1000);
-
-    const carTween = new Tween(car, store.tweenGroup)
-      .to({ y: pointY }, duration) // Drive to end road for ms
+  public showFencing() {
+    this.fencingSprite.visible = true;
+    new Tween(this.fencingSprite, store.tweenGroup)
+      .to({ alpha: 1 }, 100)
       .easing(Easing.Linear.None)
-      .onUpdate(() => {
-          this.checkCarFencing(carTween);
-          if (checkCarToChickenCollision(car)) this.onChickenHit();
-      })
-      .onComplete(() => {
-          this.removeActiveCar();
-      })
+      .start();
+    new Tween(this.fencingSprite, store.tweenGroup)
+      .to({ y: store.chicken.startPoint.y - this.fencingOffsetY }, 100)
+      .easing(Easing.Linear.None)
       .start();
   }
+  //#endregion Helpers
 
-  public updateCar(dt: number) {
-    // If car is not present, calt the time for next spawn
-    if (!this.activeCar) {
+  public update(dt: number) {
+    if (this.car) {
+      if (this.fencingSprite.visible) {
+          if (this.car.y <= this.fencingStopPointY) {
+            new Tween(this.car, store.tweenGroup)
+              .to({ y: this.fencingStopPointY }, 200)
+              .easing(Easing.Quadratic.Out) 
+              .start();
+            return;
+        }
+      }
+      this.car.y += 3 * dt;
+      this.endMoveCarPointY = store.level.height + this.car.height + 5;
+      if (this.car.y > this.endMoveCarPointY) {
+        this.removeCar();
+      }
+    } else {
+      // If car is not present, calc the time for next spawn
       this.spawnCarTimer += dt;
       if (this.spawnCarTimer >= this.nextSpawnCarTime) {
         this.spawnCarTimer = 0;
-        this.nextSpawnCarTime = this.calcNexSpawnTime();
+        this.nextSpawnCarTime = this.calcNexSpawnCarTime();
         this.spawnCar();
       }
     }
   }
 
-  private checkCarFencing(carTween: Tween) {
-    if (!this.activeCar) return;
-    if (!this.fencingSprite.visible) return;
-    if (this.activeCarStopped) return;
+  //#region Car
+  private spawnCar() {
+    if (this.isStopSpawnCar) return;
+    if (this.fencingSprite.visible) return;
 
-    const fencingCarStopPoint = store.chickenStartPoint.y - this.fencingOffsetY - this.fencingSprite.height;
-    if (this.activeCar.y < fencingCarStopPoint) {
-      this.activeCarStopped = true;
-      carTween.stop();
-      new Tween(this.activeCar, store.tweenGroup)
-      .to({ y: fencingCarStopPoint }, 300)
-      .easing(Easing.Linear.None)
-      .onStart(() => {
-          // проиграть музыку когда останавливается перед забором
-      })
-      .start();
-    }
+    const id = Math.floor(Math.random() * 4); // 4 it's count of cars
+    this.car = new Sprite({
+      texture: Assets.get(`car_${id}`),
+      anchor: { x: 0.5, y: 1 },
+      x: this.width / 2,
+      y: this.toLocal({ x: 0, y: 0 }).y - 5, // spawn car on top canvas/screen coords, NOT on top road coords
+      parent: this,
+    });
   }
 
-  private onChickenHit() {
-    console.log("HIT");
-  }
-
-  private removeActiveCar() {
-    if (this.activeCar) {
-      this.activeCar.destroy();
-      this.activeCar = null;
-    }
-  }
-
-  private calcNexSpawnTime(baseTime: number = 200) {
-    // Base 200 + (scatter 1000) = range [200, 1200]
-    const time = baseTime + Math.random() * 1000;
+  private calcNexSpawnCarTime() {
+    const baseTime = 100;
+    const rangeTime = baseTime + Math.random() * 500;
+    const time = baseTime + Math.random() * rangeTime;
     return time;
+  }
+
+  private removeCar() {
+    if (this.car) {
+      this.car?.destroy();
+      this.car = null;
+    }
   }
   //#endregion Car
 }

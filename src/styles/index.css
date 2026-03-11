@@ -2,27 +2,24 @@
    src/style/index.css
 */
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+@import './reset.css';
+
+
+#app {
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
-  background-color: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #000; /* Чтобы не было белых полей */
 }
 
 canvas {
   display: block;
-  width: 100%;
-  height: 100%;
-}
-
-#app {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  /* Защита от размытия на некоторых экранах */
+  image-rendering: auto; 
 }

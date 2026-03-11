@@ -35,14 +35,14 @@ export class Finish extends Container {
   public getFinishPoint() {
     const point = { x: 0, y: 0 };
     point.x = this.x + 150;
-    point.y = store.chickenStartPoint.y - 64;
+    point.y = store.chicken.startPoint.y - 64;
     return point;
   }
 
   public getGoldPoint() {
     const point = { x: 0, y: 0 };
     point.x = this.x + 315;
-    point.y = store.chickenStartPoint.y + 20;
+    point.y = store.chicken.startPoint.y + 20;
     return point;
   }
 }

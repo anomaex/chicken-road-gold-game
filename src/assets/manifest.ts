@@ -12,6 +12,7 @@ import springBoardImg from "./images/bg/decorations/springBoard.png";
 
 import chickenStaticImg from "./images/chicken/chickenStatic.png";
 import chickenScoreImg from "./images/chicken/chickenScore.png";
+import chickenRunOverImg from "./images/chicken/chickenRunOver.png";
 
 import coinBronzeImg from "./images/road/coinBronze.png";
 import coinGoldImg from "./images/road/coinGold.png";
@@ -37,6 +38,8 @@ export const manifest: AssetsManifest = {
       assets: [
         { alias: "chickenStatic", src: chickenStaticImg },
         { alias: "chickenScore", src: chickenScoreImg },
+        { alias: "chickenRunOver", src: chickenRunOverImg },
+        
       ],
     },
     {

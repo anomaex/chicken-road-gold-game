@@ -3,6 +3,7 @@
 //
 
 import { Application, Container, Assets } from "pixi.js";
+import { initDevtools } from '@pixi/devtools';
 
 import { manifest } from "./assets/manifest";
 import { store } from "./store";
@@ -24,6 +25,9 @@ function buildLevel() {
   store.bg.start = start;
   store.worldContainer.addChild(start);
 
+  store.chicken = new Chicken();
+  store.worldContainer.addChild(store.chicken);
+
   let x = start.width - 10; // 10px it's some transparent in bg start image
 
   for (let i = 0; i < store.level.difficulty.easy; i++) {
@@ -33,6 +37,8 @@ function buildLevel() {
     x += road.width;
   }
 
+  store.bg.roads[0].setBacklightScore(true); // turn on backlight score on first road
+
   x -= 7; // last road marking
 
   const finish = new Finish(x);
@@ -41,17 +47,14 @@ function buildLevel() {
 
   store.level.width = x + store.bg.finish.width;
 
-  store.chicken = new Chicken();
-  store.chicken.preJump();
-  store.worldContainer.addChild(store.chicken);
+  moveCameraTo(store.chicken.startPoint.x, store.chicken.startPoint.y, 0);
 
-  moveCameraTo(store.chicken.x, store.chicken.y, 0);
-
-  store.worldContainer.addChild(new Overlay());
+  store.worldContainer.addChild(new Overlay()); // adds decoration forward layer
 }
 
 async function bootstrap() {
-  store.app = new Application();
+  const app = new Application();
+  store.app = app;
   await store.app.init({
     //resizeTo: window, // pixijs auto resize to window, upd: not needed, we auto resize every game tick
     resolution: window.devicePixelRatio || 1,
@@ -75,16 +78,22 @@ async function bootstrap() {
   store.app.ticker.add((ticker) => {
     const dt = ticker.deltaMS;
 
+    store.tweenGroup.update();
+
     store.bg.roads.forEach((road) => {
-      road.updateCar(dt);
+      road.update(dt); // first car move
     });
 
-    updateCamera();
+    store.chicken.update(dt); // second chicken move
 
-    store.tweenGroup.update(ticker.lastTime);
+    updateCamera();
   });
 
   initInput();
+
+  if (import.meta.env.DEV) {
+    initDevtools({ app });
+  }
 }
 
 bootstrap().catch(console.error);

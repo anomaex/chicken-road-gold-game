@@ -46,11 +46,6 @@ class GameStore {
     block: false,
   };
 
-  public chickenStartPoint = {
-    // In worldContainer coords
-    x: 218,
-    y: 894,
-  };
   public chicken!: Chicken;
 
   public bg = {
@@ -60,6 +55,14 @@ class GameStore {
   };
 
   public tweenGroup = new Group();
+
+  public ui = {
+    fontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    colors: {
+        primary: '#fff5e6',
+        inActive: '#a8742f',
+    }
+  }
 }
 
 export const store = new GameStore();
