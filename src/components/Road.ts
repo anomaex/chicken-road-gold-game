@@ -10,6 +10,7 @@ import { calculateMultiplier } from "../systems/score";
 import { store } from "../store";
 
 export class Road extends Container {
+  private id: number;
   private coinBronzeContainer!: Container;
   private scoreText!: Text;
 
@@ -29,6 +30,7 @@ export class Road extends Container {
   constructor(id: number, x: number = 0) {
     super();
 
+    this.id = id;
     this.x = x;
 
     new Sprite({
@@ -40,6 +42,9 @@ export class Road extends Container {
     this.scoreMulti = calculateMultiplier(id + 1);
 
     this.addObjects();
+
+    if (this.id == 0)
+      this.setBacklightScore(true);
   }
 
   private addObjects() {
@@ -132,10 +137,10 @@ export class Road extends Container {
           .to({ x: 1 }, 150)
           .easing(Easing.Linear.None)
           .start();
-      }, 200);
+      }, 250);
     } else {
       this.coinGoldSprite.visible = false;
-      this.coinGoldSprite.scale.set(1, 1);
+      this.coinGoldSprite.scale.set(0, 1);
     }
   }
 
@@ -148,16 +153,22 @@ export class Road extends Container {
     else this.scoreText.alpha = 0.7;
   }
 
-  public showFencing() {
-    this.fencingSprite.visible = true;
-    new Tween(this.fencingSprite, store.tweenGroup)
-      .to({ alpha: 1 }, 100)
-      .easing(Easing.Linear.None)
-      .start();
-    new Tween(this.fencingSprite, store.tweenGroup)
-      .to({ y: store.chicken.startPoint.y - this.fencingOffsetY }, 100)
-      .easing(Easing.Linear.None)
-      .start();
+  public visibleFencing(enable: boolean) {
+    if (enable) {
+      this.fencingSprite.visible = true;
+      new Tween(this.fencingSprite, store.tweenGroup)
+        .to({ alpha: 1 }, 100)
+        .easing(Easing.Linear.None)
+        .start();
+      new Tween(this.fencingSprite, store.tweenGroup)
+        .to({ y: store.chicken.startPoint.y - this.fencingOffsetY }, 100)
+        .easing(Easing.Linear.None)
+        .start();
+    } else {
+      this.fencingSprite.visible = false;
+      this.fencingSprite.alpha = 0;
+      this.fencingSprite.y = store.chicken.startPoint.y - this.fencingOffsetY * 5;
+    }
   }
   //#endregion Helpers
 
@@ -172,7 +183,7 @@ export class Road extends Container {
             return;
         }
       }
-      this.car.y += 3 * dt;
+      this.car.y += 1.5 * dt;
       this.endMoveCarPointY = store.level.height + this.car.height + 5;
       if (this.car.y > this.endMoveCarPointY) {
         this.removeCar();
@@ -217,4 +228,16 @@ export class Road extends Container {
     }
   }
   //#endregion Car
+
+  public restart() {
+    this.removeCar();
+    if (this.id == 0)
+      this.setBacklightScore(true);
+    else
+      this.setBacklightScore(false);
+    this.visibleCoinGold(false);
+    this.visibleCoinBronze(true);
+    this.visibleFencing(false);
+    this.isStopSpawnCar = false;
+  }
 }

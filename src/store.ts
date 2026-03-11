@@ -3,7 +3,7 @@
 //
 
 import { Application, Container } from "pixi.js";
-import { Group } from "@tweenjs/tween.js";
+import { Group, Tween } from "@tweenjs/tween.js";
 
 import { Start } from "./components/Start";
 import { Road } from "./components/Road";
@@ -40,6 +40,7 @@ class GameStore {
     // For input:
     isDragging: false,
     lastPointerX: 0,
+    moveTween: null as unknown as Tween,
   };
 
   public input = {

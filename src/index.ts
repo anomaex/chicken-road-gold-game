@@ -37,8 +37,6 @@ function buildLevel() {
     x += road.width;
   }
 
-  store.bg.roads[0].setBacklightScore(true); // turn on backlight score on first road
-
   x -= 7; // last road marking
 
   const finish = new Finish(x);

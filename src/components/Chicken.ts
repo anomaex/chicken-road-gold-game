@@ -3,9 +3,10 @@
 //
 
 import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
+import { Tween, Easing, Group } from "@tweenjs/tween.js";
 
 import { store } from "../store";
-import { moveCameraTo } from "../systems/camera";
+import { moveCameraTo, shakeCameraX } from "../systems/camera";
 
 export class Chicken extends Container {
   public startPoint = {
@@ -23,12 +24,15 @@ export class Chicken extends Container {
   private scoreText!: Text;
   private scoreMulti = 1;
 
-  private nextRoadIndex = 0;
+  private currentRoadIndex = -1;
 
   private jumpPositionX = 0;
   private isJump = false;
 
-  public isRunOver = false;
+  private isCollisionHit = false;
+  private isRunOver = false;
+
+  private isFinish = false;
 
   constructor() {
     super();
@@ -104,73 +108,96 @@ export class Chicken extends Container {
   //#endregion Helpers
 
   public update(dt: number) {
-    if (!this.isJump) return;
+    if (this.isRunOver) return;
+    if (this.isFinish) return;
 
-    const jumpSpeed = 1 * dt;
-    const newPosX = this.x + jumpSpeed;
-
-    const isHit = this.checkCollision();
-    if (isHit)
-      this.isRunOver = true;
-
-    if (this.x >= this.jumpPositionX) {
-      this.x = this.jumpPositionX;
-
-      if (!this.isRunOver) {
-        const currentRoad = store.bg.roads[this.nextRoadIndex];
-        if (currentRoad)
-          this.scoreMulti = currentRoad.getScoreMulti();
-        this.visibleScore(true);
-
-        this.nextRoadIndex++;
-
-        const nextRoad = store.bg.roads[this.nextRoadIndex];
-        if (nextRoad)
-          nextRoad.setBacklightScore(true)
-
-        currentRoad.showFencing();
-      } else {
-        this.chickenStaticSprite.visible = false;
-        this.chickenRunOverSprite.visible = true;
+    if (this.isJump) {
+      
+      if (this.x < this.jumpPositionX) {
+        this.x += 1.15 * dt;
       }
 
-      this.isJump = false;
-      store.input.block = false;
+      // Check collision
+      this.checkCollision();
+      
+      if (this.x >= this.jumpPositionX) {
+        this.isJump = false;
 
-    } else {
-      this.x = newPosX;
+        this.x = this.jumpPositionX;
+
+        if (this.isCollisionHit) {
+          this.isRunOver = true;
+
+          this.chickenStaticSprite.visible = false;
+          this.chickenRunOverSprite.visible = true;
+
+          shakeCameraX(); // shake camera on collision hit 
+
+          // Emulating restart
+          setTimeout(() => {
+            this.restart();
+          }, 1000);
+
+          return;
+        }
+
+        this.currentRoadIndex += 1; // on road I jump
+
+        const currentRoad = store.bg.roads[this.currentRoadIndex];
+        this.scoreMulti = currentRoad.getScoreMulti();
+
+        currentRoad.visibleFencing(true);
+
+        const nextRoadIndex = this.currentRoadIndex + 1; // need check what road next, after on road I jump 
+        if (nextRoadIndex > store.bg.roads.length - 1) {
+          // Run finish event
+          this.isFinish = true;
+          currentRoad.visibleCoinGold(true);
+
+          // Emulating restart
+          setTimeout(() => {
+            this.restart();
+          }, 1000);
+          
+        } else {
+          this.visibleScore(true);
+        }
+        
+        store.input.block = false;
+      }
+
     }
   }
 
   //#region Jump
   public jump() {
     if (this.isRunOver) return;
+    if (this.isFinish) return;
 
+    // Block input when camera and chicken moving on next point
     if (store.input.block) return;
     store.input.block = true;
 
     if (this.isJump) return;
     this.isJump = true;
 
-    const nextRoad = store.bg.roads[this.nextRoadIndex];
-
-    // HERE need to CHECK for WIN
-
-    this.visibleScore(false);
+    const nextRoad = store.bg.roads[this.currentRoadIndex + 1];
     nextRoad.visibleCoinBronze(false);
-
+    
+    this.visibleScore(false);
+        
     this.jumpPositionX = nextRoad.x + nextRoad.width / 2;
     moveCameraTo(this.jumpPositionX + (this.width / 2), this.startPoint.y, 500);
 
-    const prevRoad = store.bg.roads[this.nextRoadIndex - 1];
-    if (prevRoad) {
-      prevRoad.visibleCoinGold(true);
+    const currentRoad = store.bg.roads[this.currentRoadIndex];
+    if (currentRoad) {
+      currentRoad.visibleCoinGold(true);
     }
   }
 
-  private checkCollision(): boolean {
-    const currentRoad = store.bg.roads[this.nextRoadIndex];
-    if (!currentRoad.car) return false;
+  private checkCollision() {
+    const currentRoad = store.bg.roads[this.currentRoadIndex + 1];
+    if (!currentRoad.car) return;
 
     // First need to check points
     const upY = currentRoad.fencingStopPointY; // in worldContainer coords
@@ -181,22 +208,88 @@ export class Chicken extends Container {
     //const carBackPointY = currentRoad.car.y - currentRoad.car.height;
 
     if (carFwdPointY >= upY && carFwdPointY <= downY) {
+      console.log("Hit forward")
       currentRoad.isStopSpawnCar = true;
-      console.log("HIT to Forward");
-      return true;
+      this.isCollisionHit = true;
     }
     if (carCenterPointY >= upY && carCenterPointY <= downY) {
+      console.log("Hit center")
       currentRoad.isStopSpawnCar = true;
-      console.log("HIT to Center");
-      return true;
+      this.isCollisionHit = true;
     }
     /*if (carBackPointY >= upY && carBackPointY <= downY) {
       console.log("HIT to back");
       currentRoad.carStopped = true;
       return true;
     }*/
-
-    return false;
   }
   //#endregion JUMP
+
+  private restart() {
+    store.tweenGroup.allStopped();
+    store.tweenGroup.removeAll();
+    store.tweenGroup = new Group();
+
+    // Roads first
+    store.bg.roads.forEach(e => {
+      e.restart();
+    });
+
+    this.x = this.startPoint.x;
+    this.y = this.startPoint.y;
+
+    this.chickenRunOverSprite.visible = false;
+    this.chickenStaticSprite.visible = true;
+
+    this.scoreMulti = 1;
+
+    this.currentRoadIndex = -1;
+
+    moveCameraTo(this.startPoint.x, this.startPoint.y, 300);
+   
+    this.isCollisionHit = false;
+
+    this.isFinish = false;
+
+    this.isRunOver = false;
+
+    store.input.block = false;
+  }
+
+    //#region Finish
+  private moveToFinish() {
+    const point = store.bg.finish.getFinishPoint();
+
+    new Tween(this, store.tweenGroup)
+      .to(point, 350)
+      .easing(Easing.Quadratic.InOut)
+      .onStart(() => {
+        moveCameraTo(point.x, point.y, 800);
+      })
+      .onComplete(() => {
+        setTimeout(() => {
+          this.jumpToGold();
+        }, 300);
+      })
+      .start();
+  }
+
+  private jumpToGold() {
+    const point = store.bg.finish.getGoldPoint();
+
+    new Tween(this, store.tweenGroup)
+      .to(point, 350)
+      .easing(Easing.Quadratic.InOut)
+      .onStart(() => {
+        moveCameraTo(point.x, point.y, 800);
+      })
+      .onComplete(() => {
+        // Imitation restart
+        setTimeout(() => {
+          this.restart();
+        }, 1000);
+      })
+      .start();
+  }
+  //#endregion Finish
 }

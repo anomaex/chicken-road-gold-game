@@ -39,9 +39,27 @@ export function updateCamera() {
   store.camera.centerY = (sh / 2 - store.worldContainer.y) / scale;
 }
 
-export function moveCameraTo(x: number, y: number, duration: number = 800) {
-  new Tween(store.camera, store.tweenGroup)
+export function moveCameraTo(x: number, y: number, duration: number) {
+  store.camera.moveTween?.stop();
+  store.camera.moveTween = new Tween(store.camera, store.tweenGroup)
     .to({ centerX: x, centerY: y }, duration)
+    .easing(Easing.Quadratic.Out)
+    .start();
+}
+
+export function shakeCameraX(intensity: number = 5, duration: number = 300) {
+  const startX = store.camera.centerX;
+  store.camera.moveTween?.stop();
+  store.camera.moveTween = new Tween(store.camera, store.tweenGroup)
+    .to({ 
+      centerX: [
+        startX + intensity, 
+        startX - intensity, 
+        startX + intensity * 0.5, 
+        startX - intensity * 0.5, 
+        startX
+      ] 
+    }, duration)
     .easing(Easing.Quadratic.Out)
     .start();
 }
