@@ -1,5 +1,5 @@
 //
-// src/systems/collision.ts
+// src/game/systems/collision.ts
 //
 
 import { Sprite } from "pixi.js";

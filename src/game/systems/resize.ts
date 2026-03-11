@@ -1,8 +1,8 @@
 //
-// src/systems/resize.ts
+// src/game/systems/resize.ts
 //
 
-import { store } from "../store";
+import { store } from "../../store";
 
 function resize() {
   const screenWidth = window.innerWidth;

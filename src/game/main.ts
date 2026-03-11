@@ -1,11 +1,11 @@
 //
-// src/index.ts
+// src/game/main.ts
 //
 
 import { Application, Container, Assets } from "pixi.js";
 
 import { manifest } from "./assets/manifest";
-import { store } from "./store";
+import { store } from "../store";
 
 import { Start } from "./components/Start";
 import { Road } from "./components/Road";
@@ -16,8 +16,6 @@ import { Overlay } from "./components/Overlay";
 import { initResizeHandler } from "./systems/resize";
 import { updateCamera, moveCameraTo } from "./systems/camera";
 import { initInput } from "./systems/input";
-
-import "./styles/index.css";
 
 function buildLevel() {
   const start = new Start();
@@ -49,14 +47,14 @@ function buildLevel() {
   store.worldContainer.addChild(new Overlay()); // adds decoration forward layer
 }
 
-async function bootstrap() {
-  const app = new Application();
-  store.app = app;
+export async function initGame() {
+  store.app = new Application();
   await store.app.init({
     //resizeTo: window, // pixijs auto resize to window, upd: not needed, we auto resize every game tick
     resolution: window.devicePixelRatio || 1,
     autoDensity: true,
   });
+
   document.getElementById("pixi-container")!.appendChild(store.app.canvas);
 
   await Assets.init({ manifest: manifest });
@@ -88,9 +86,8 @@ async function bootstrap() {
 
   initInput();
 
+  // Pixi DevTools
   if (import.meta.env.DEV) {
-    globalThis.__PIXI_APP__ = app;
+    globalThis.__PIXI_APP__ = store.app;
   }
 }
-
-bootstrap().catch(console.error);

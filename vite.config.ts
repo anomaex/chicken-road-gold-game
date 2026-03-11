@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import solidPlugin from "vite-plugin-solid";
 import { viteSingleFile } from "vite-plugin-singlefile";
 
 // https://vite.dev/config/
@@ -8,9 +9,9 @@ export default defineConfig({
     port: 8080,
     open: true,
   },
-  plugins: [viteSingleFile()],
+  plugins: [solidPlugin(), viteSingleFile()],
   build: {
-    target: "es2015",
+    target: "esnext", // for solid js better use esnext
     assetsInlineLimit: 100000000, // ВАЖНО: 100MB лимит, чтобы картинки стали Base64
     chunkSizeWarningLimit: 100000000,
     cssCodeSplit: false,

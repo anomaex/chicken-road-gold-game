@@ -1,9 +1,9 @@
 //
-// src/systems/input.ts
+// src/game/systems/input.ts
 //
 
 import { FederatedPointerEvent } from "pixi.js";
-import { store } from "../store";
+import { store } from "../../store";
 
 export function initInput() {
   const app = store.app;

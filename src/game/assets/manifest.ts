@@ -1,5 +1,5 @@
 //
-// src/assets/manifest.ts
+// src/game/assets/manifest.ts
 //
 
 import type { AssetsManifest } from "pixi.js";

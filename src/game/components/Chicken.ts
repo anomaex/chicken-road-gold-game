@@ -1,11 +1,11 @@
 //
-// src/components/Chicken.ts
+// src/game/components/Chicken.ts
 //
 
 import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
 import { Group } from "@tweenjs/tween.js";
 
-import { store } from "../store";
+import { store } from "../../store";
 import { moveCameraTo, shakeCameraX } from "../systems/camera";
 
 export class Chicken extends Container {

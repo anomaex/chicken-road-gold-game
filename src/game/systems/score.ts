@@ -1,5 +1,5 @@
 //
-// src/systems/score.ts
+// src/game/systems/score.ts
 //
 
 export function calculateMultiplier(jump: number): number {

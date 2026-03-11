@@ -1,9 +1,9 @@
 //
-// src/components/Finish.ts
+// src/game/components/Finish.ts
 //
 
 import { Container, Sprite, Assets } from "pixi.js";
-import { store } from "../store";
+import { store } from "../../store";
 
 export class Finish extends Container {
   constructor(x: number = 0) {

@@ -1,5 +1,5 @@
 //
-// src/components/Start.ts
+// src/game/components/Start.ts
 //
 
 import { Container, Sprite, Assets } from "pixi.js";

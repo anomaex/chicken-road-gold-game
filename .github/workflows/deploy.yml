@@ -1,4 +1,4 @@
-name: Build and Deploy Playable Ad
+name: Build and Deploy Playable Ad game
 
 on:
   push:

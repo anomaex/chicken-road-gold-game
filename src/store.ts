@@ -5,10 +5,10 @@
 import { Application, Container } from "pixi.js";
 import { Group, Tween } from "@tweenjs/tween.js";
 
-import { Start } from "./components/Start";
-import { Road } from "./components/Road";
-import { Finish } from "./components/Finish";
-import { Chicken } from "./components/Chicken";
+import { Start } from "./game/components/Start";
+import { Road } from "./game/components/Road";
+import { Finish } from "./game/components/Finish";
+import { Chicken } from "./game/components/Chicken";
 
 class GameStore {
   public app!: Application;

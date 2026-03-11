@@ -1,5 +1,5 @@
 //
-// src/components/Overlay.ts
+// src/game/components/Overlay.ts
 //
 
 import { Container } from "pixi.js";

@@ -1,5 +1,5 @@
 //
-// src/components/Road.ts
+// src/game/components/Road.ts
 //
 
 import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
@@ -7,7 +7,7 @@ import { Tween, Easing } from "@tweenjs/tween.js";
 
 import { calculateMultiplier } from "../systems/score";
 
-import { store } from "../store";
+import { store } from "../../store";
 
 export class Road extends Container {
   private id: number;

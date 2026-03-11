@@ -1,10 +1,10 @@
 //
-// src/systems/camera.ts
+// src/game/systems/camera.ts
 //
 
 import { Tween, Easing } from "@tweenjs/tween.js";
 
-import { store } from "../store";
+import { store } from "../../store";
 
 // ВОЗМОЖно в дальнейшем сделать что бы при переворачивание экрана с land to portrain zoom персонажа
 // уменьшался или добавлялся, если понадобится то сделать для разных экранов, по типу если экран превышает
