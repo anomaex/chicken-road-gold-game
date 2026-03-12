@@ -6,6 +6,7 @@ import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
 import { Tween, Easing } from "@tweenjs/tween.js";
 
 import { calculateMultiplier } from "../systems/score";
+import { playCarBrakingAudio } from "../systems/audio";
 
 import { store } from "../../store";
 
@@ -179,10 +180,14 @@ export class Road extends Container {
     if (this.car) {
       if (this.fencingSprite.visible) {
         if (this.car.y <= this.fencingStopPointY) {
-          new Tween(this.car, store.tweenGroup)
-            .to({ y: this.fencingStopPointY }, 200)
-            .easing(Easing.Quadratic.Out)
-            .start();
+          if (!this.isStopSpawnCar) {
+            this.isStopSpawnCar = true;
+            playCarBrakingAudio();
+            new Tween(this.car, store.tweenGroup)
+              .to({ y: this.fencingStopPointY }, 200)
+              .easing(Easing.Quadratic.Out)
+              .start();
+          }
           return;
         }
       }

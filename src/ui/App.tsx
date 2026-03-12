@@ -4,12 +4,12 @@
 
 import { Component } from "solid-js";
 
-import { BottomShadow } from "./components/BotomShadow";
+import { WinNotify } from "./components/top/WinNotify";
 
 export const App: Component = () => {
   return (
     <div class="ui-wrapper">
-      <BottomShadow />
+      <WinNotify />
     </div>
   );
 };

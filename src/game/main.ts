@@ -16,6 +16,7 @@ import { Overlay } from "./components/Overlay";
 import { initResizeHandler } from "./systems/resize";
 import { updateCamera, moveCameraTo } from "./systems/camera";
 import { initInput } from "./systems/input";
+import { initAudio } from "./systems/audio";
 
 function buildLevel() {
   const start = new Start();
@@ -58,7 +59,7 @@ export async function initGame() {
   document.getElementById("pixi-container")!.appendChild(store.app.canvas);
 
   await Assets.init({ manifest: manifest });
-  await Assets.loadBundle(["bg", "chicken", "road", "decorations"]); // pixijs load assets to self cache
+  await Assets.loadBundle(["bg", "chicken", "road", "decorations", "audio"]); // pixijs load assets to self cache
 
   store.worldContainer = new Container();
   store.app.stage.addChild(store.worldContainer);
@@ -85,6 +86,8 @@ export async function initGame() {
   });
 
   initInput();
+
+  initAudio();
 
   // Pixi DevTools
   if (import.meta.env.DEV) {

@@ -10,6 +10,7 @@
     "dev": "vite"
   },
   "dependencies": {
+    "@pixi/sound": "^6.0.1",
     "@tweenjs/tween.js": "^25.0.0",
     "pixi.js": "^8.8.1",
     "solid-js": "^1.9.11"

@@ -2,7 +2,8 @@
 // src/game/components/Overlay.ts
 //
 
-import { Container } from "pixi.js";
+import { Container, Sprite, Assets } from "pixi.js";
+import { store } from "../../store";
 
 export class Overlay extends Container {
   constructor(x: number = 0, y: number = 0) {
@@ -10,5 +11,18 @@ export class Overlay extends Container {
 
     this.x = x;
     this.y = y;
+
+    this.zIndex = 10;
+
+    this.AddOverlayDecoration();
+  }
+
+  private AddOverlayDecoration() {
+    new Sprite({
+      texture: Assets.get("statuePhone"),
+      x: store.bg.start.x + 25,
+      y: 645,
+      parent: this,
+    });
   }
 }

@@ -9,6 +9,7 @@ import bgRoadImg from "./images/bg/bgRoad.png";
 import bgFinishImg from "./images/bg/bgFinish.png";
 
 import springBoardImg from "./images/bg/decorations/springBoard.png";
+import statuePhoneImg from "./images/bg/decorations/statuePhone.png";
 
 import chickenStaticImg from "./images/chicken/chickenStatic.png";
 import chickenScoreImg from "./images/chicken/chickenScore.png";
@@ -23,8 +24,15 @@ import car1Img from "./images/road/cars/car_1.png";
 import car2Img from "./images/road/cars/car_2.png";
 import car3Img from "./images/road/cars/car_3.png";
 
+import mainMusicAudio from "./audio/mainMusic.mp3";
+import jumpAudio from "./audio/jump.mp3";
+import runOverAudio from "./audio/runOver.mp3";
+import carBrakingAudio from "./audio/carBraking.mp3";
+import carDriveAudio from "./audio/carDrive.mp3";
+
 export const manifest: AssetsManifest = {
   bundles: [
+    // Images
     {
       name: "bg",
       assets: [
@@ -55,7 +63,21 @@ export const manifest: AssetsManifest = {
     },
     {
       name: "decorations",
-      assets: [{ alias: "springBoard", src: springBoardImg }],
+      assets: [
+        { alias: "springBoard", src: springBoardImg },
+        { alias: "statuePhone", src: statuePhoneImg },
+      ],
+    },
+    // Audio
+    {
+      name: "audio",
+      assets: [
+        { alias: "mainMusic", src: mainMusicAudio },
+        { alias: "jumpSound", src: jumpAudio },
+        { alias: "runOverSound", src: runOverAudio },
+        { alias: "carBrakingSound", src: carBrakingAudio },
+        { alias: "carDriveSound", src: carDriveAudio },
+      ],
     },
   ],
 };

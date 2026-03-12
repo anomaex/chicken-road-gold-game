@@ -4,6 +4,7 @@
 
 import { Application, Container } from "pixi.js";
 import { Group, Tween } from "@tweenjs/tween.js";
+import { createMutable } from "solid-js/store";
 
 import { Start } from "./game/components/Start";
 import { Road } from "./game/components/Road";
@@ -64,6 +65,12 @@ class GameStore {
       inActive: "#a8742f",
     },
   };
+
+  public state = createMutable({
+    isMuted: false,
+    bet: 0,
+    winScore: 0,
+  });
 }
 
 export const store = new GameStore();

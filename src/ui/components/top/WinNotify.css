@@ -1,0 +1,106 @@
+/*
+   src/ui/components/top/WinNotify.css
+*/
+
+.win-notify-card-wrapper {
+   position: absolute;
+   top: 0;
+   left: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   display: flex;
+   justify-content: center;
+   align-items: flex-start;
+   padding-top: 5vh;
+}
+
+.win-notify-card {
+   position: relative;
+   background-color: #386449;
+   border: 1px solid #90d194;
+   border-radius: 15px;
+   padding: 20px 20px 15px 20px;
+   min-width: 200px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   animation: simplePulse 0.8s ease-out forwards;
+}
+
+.win-notify-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fde332;
+  color: #333;
+  font-size: 18px;
+  font-weight: 900;
+  padding: 4px 30px;
+  border-radius: 25px;
+  border: 1px solid #2e2e2e;
+  white-space: nowrap;
+}
+
+.win-notify-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.win-notify-score {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 900;
+  font-family: 'Arial Black', sans-serif;
+  letter-spacing: -1px;
+}
+
+/* Coint icon, can change to custom icon or image */
+.win-notify-coin-icon {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  color: #417254;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.top-shadow-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  height:  30vh; /* height 10% from screen height */
+  
+  background: linear-gradient(to bottom, 
+   rgba(0, 0, 0, 0.8) 0%,
+   rgba(0, 0, 0, 0) 100%
+  );
+
+  animation: shadowFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes simplePulse {
+  0% { transform: scale(0.8); }
+  25% { transform: scale(1.4); } /* first power pulse */
+  45% { transform: scale(0.8); }
+  65% { transform: scale(1.2); } /* second lower pulse */
+  85% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shadowFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

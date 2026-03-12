@@ -28,7 +28,7 @@ body {
   /* Сглаживание шрифтов */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* safe fonts for all platforms */
 }
 
 /* Убираем дефолтные стили кнопок для HTML UI */

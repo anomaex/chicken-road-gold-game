@@ -1,8 +1,8 @@
 /*
-   src/ui/components/BottomShadow.css
+   src/ui/components/bottom/BottomShadow.css
 */
 
-.bottom-gradient-overlay {
+.bottom-gradient-shadow {
   position: absolute;
   bottom: 0;
   left: 0;

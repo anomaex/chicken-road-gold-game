@@ -7,6 +7,11 @@ import { Group } from "@tweenjs/tween.js";
 
 import { store } from "../../store";
 import { moveCameraTo, shakeCameraX } from "../systems/camera";
+import {
+  playJumpAudio,
+  playRunOverAudio,
+  playCarDriveAudio,
+} from "../systems/audio";
 
 export class Chicken extends Container {
   public startPoint = {
@@ -130,6 +135,9 @@ export class Chicken extends Container {
           this.chickenStaticSprite.visible = false;
           this.chickenRunOverSprite.visible = true;
 
+          playCarDriveAudio();
+          playRunOverAudio();
+
           shakeCameraX(); // shake camera on collision hit
 
           // Emulating restart
@@ -153,10 +161,13 @@ export class Chicken extends Container {
           this.isFinish = true;
           currentRoad.visibleCoinGold(true);
 
+          // SolidJS listen winScore and after finish or cashout he open notification
+          store.state.winScore = 1 * this.scoreMulti; // 1 NEED TO CHANGE ON BET(store.state.bet) when start game
+
           // Emulating restart
           setTimeout(() => {
             this.restart();
-          }, 1000);
+          }, 3000);
         } else {
           this.visibleScore(true);
         }
@@ -182,6 +193,8 @@ export class Chicken extends Container {
     nextRoad.visibleCoinBronze(false);
 
     this.visibleScore(false);
+
+    playJumpAudio();
 
     this.jumpPositionX = nextRoad.x + nextRoad.width / 2;
     moveCameraTo(this.jumpPositionX + this.width / 2, this.startPoint.y, 500);
@@ -234,6 +247,9 @@ export class Chicken extends Container {
 
     this.chickenRunOverSprite.visible = false;
     this.chickenStaticSprite.visible = true;
+
+    store.state.winScore = 0;
+    store.state.bet = 0;
 
     this.scoreMulti = 1;
 
