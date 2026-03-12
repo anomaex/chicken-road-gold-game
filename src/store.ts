@@ -26,7 +26,7 @@ class GameStore {
     width: 720, // dynamic, change when level is build
     height: 1280,
     difficulty: {
-      easy: 3, // 30 default
+      easy: 6, // 30 default
       medium: 25, // 25
       hard: 22, // 22
       hardcore: 18, // 18

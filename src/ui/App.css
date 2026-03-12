@@ -1,0 +1,17 @@
+/*
+   src/ui/App.css
+*/
+
+/* Coint icon, can change to custom icon or image */
+.coin-icon {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  color: #417254;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}

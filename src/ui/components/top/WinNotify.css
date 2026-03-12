@@ -2,7 +2,7 @@
    src/ui/components/top/WinNotify.css
 */
 
-.win-notify-card-wrapper {
+.win-notify-overlay {
    position: absolute;
    top: 0;
    left: 0;
@@ -47,6 +47,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
+
+  & .coin-icon {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 .win-notify-score {
@@ -55,20 +60,6 @@
   font-weight: 900;
   font-family: 'Arial Black', sans-serif;
   letter-spacing: -1px;
-}
-
-/* Coint icon, can change to custom icon or image */
-.win-notify-coin-icon {
-  width: 20px;
-  height: 20px;
-  background-color: #fff;
-  color: #417254;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 14px;
 }
 
 .top-shadow-gradient {

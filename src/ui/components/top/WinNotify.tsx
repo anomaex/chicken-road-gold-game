@@ -26,14 +26,14 @@ export const WinNotify = () => {
     <Show when={isVisible()}>
       <div class="win-notify-wrapper">
         <div class="top-shadow-gradient" />
-        <div class="win-notify-card-wrapper">
+        <div class="win-notify-overlay">
           <div class="win-notify-card">
             <div class="win-notify-badge">WIN!</div>
             <div class="win-notify-row">
               <span class="win-notify-score">
                 {formatScore(store.state.winScore)}
               </span>
-              <span class="win-notify-coin-icon">$</span>
+              <span class="coin-icon">$</span>
             </div>
           </div>
         </div>
