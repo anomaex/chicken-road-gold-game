@@ -18,9 +18,8 @@ npm install -D vite-plugin-solid
 - export images from source to .webp(lighter size than .png), use compress, сompare quality and choose.
 
 ##### Alls audio used to convert from source to new .mp3 files, prefer:
-- Mono, quality 100%, or stereo if mono broke the sample.
-- Sample rate, sound 11025 Hz - 22050 Hz(prefer).
+- Mono, quality 100%, or stereo if mono broke the sample from source.
+- Sample rate, sound 11025 Hz, 22050 Hz(prefer) and more.
 - 16 bit bit depth.
-- export (Audition) Bitrate see options from 11024 or 22050 Hz(prefer 24 - 40 Kbps, see how broke sample).
+- export (Audition) Bitrate see options for your Sample rate, test and see how broke the sample from source.
 - export (Audition) remove checkbox markers and metadata.
-- check .aac in container .m4a, for better quality and size than .mp3

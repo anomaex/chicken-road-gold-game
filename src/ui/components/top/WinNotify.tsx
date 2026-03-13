@@ -16,7 +16,7 @@ export const WinNotify = () => {
   };
 
   createEffect(() => {
-    const score = store.state.winBalance;
+    const score = store.state.winBetCount;
 
     if (score > 0) setIsVisible(true);
     else setIsVisible(false);
@@ -31,7 +31,7 @@ export const WinNotify = () => {
             <div class="win-notify-badge">WIN!</div>
             <div class="win-notify-row">
               <span class="win-notify-score">
-                {formatScore(store.state.winBalance)}
+                {formatScore(store.state.winBetCount)}
               </span>
               <span class="coin-icon">$</span>
             </div>

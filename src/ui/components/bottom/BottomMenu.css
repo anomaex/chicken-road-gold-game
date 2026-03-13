@@ -69,6 +69,60 @@
     }
   }
   
+  & .cashout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    text-align: center;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #ffc916;
+    color: #000000;
+    margin-right: 10px;
+    cursor: pointer;
+
+    & .label {
+      color: inherit
+    }
+
+    & .value-row {
+      display: flex;
+      align-items: center;
+      color: inherit;
+      font-size: 18px;
+      gap: 5px;
+      align-content: center;
+      text-align: center;
+    }
+    
+    & .coin-icon {
+      background-color: #000000;
+      color: #ffc916;
+    }
+
+    &:hover {
+      background-color: #806200;
+      color: #ffc916;
+
+      & .coin-icon {
+        background-color: #ffc916;
+        color: #806200;
+      }
+    }
+  }
+
+  & .cashout.disabled {
+    pointer-events: none;
+    background-color: #252525;
+    color: #797979;
+
+    & .coin-icon {
+      background-color: #797979;
+      color: #252525;
+    }
+  }
+
   & .play-section {
     display: flex;
     flex-direction: row;
@@ -149,7 +203,7 @@
     & .bet.disabled {
       pointer-events: none;
       background-color: #1f1f1f;
-        color: #c4c4c4;
+      color: #c4c4c4;
 
       & .label {
         color: #777777;

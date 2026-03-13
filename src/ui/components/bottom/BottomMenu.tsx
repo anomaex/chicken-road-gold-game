@@ -23,6 +23,7 @@ export const BottomMenu = () => {
 
   const increment = () => {
     if (store.state.isGameStarted) return;
+    if (store.state.inputBlock) return;
 
     let newNum = store.state.bet;
     if (newNum < 10) newNum += 1;
@@ -36,6 +37,7 @@ export const BottomMenu = () => {
 
   const decrement = () => {
     if (store.state.isGameStarted) return;
+    if (store.state.inputBlock) return;
 
     let newNum = store.state.bet;
     if (newNum <= 1) newNum = 1;
@@ -49,6 +51,7 @@ export const BottomMenu = () => {
 
   const handleInput = (e: InputEvent) => {
     if (store.state.isGameStarted) return;
+    if (store.state.inputBlock) return;
 
     const target = e.target as HTMLInputElement;
     const cleanValue = target.value.replace(/\D/g, "");
@@ -61,6 +64,7 @@ export const BottomMenu = () => {
 
   const changeDifficulty = (increase: boolean) => {
     if (store.state.isGameStarted) return;
+    if (store.state.inputBlock) return;
 
     const currentIndex = store.state.difficulty;
     let newIndex = increase ? currentIndex + 1 : currentIndex - 1;
@@ -71,6 +75,7 @@ export const BottomMenu = () => {
 
   const handleSelect = (opt: string, e: MouseEvent) => {
     if (store.state.isGameStarted) return;
+    if (store.state.inputBlock) return;
 
     e.stopPropagation();
     store.state.difficulty = getDifficultyIndex(opt);
@@ -78,11 +83,23 @@ export const BottomMenu = () => {
   };
 
   const handlePlayBtnClick = () => {
+    if (store.state.inputBlock) return;
     if (!store.state.isGameStarted) {
       store.state.isGameStarted = true;
       store.state.balance -= store.state.bet;
     }
     store.chicken.jump();
+  };
+
+  const formatCount = (val: number) => {
+    return Number.isInteger(val) ? val : val.toFixed(2);
+  };
+
+  const handleCashoutClick = () => {
+    if (!store.state.isGameStarted) return;
+    if (store.state.inputBlock) return;
+
+    store.chicken.cashout()
   };
 
   return (
@@ -99,6 +116,16 @@ export const BottomMenu = () => {
               </span>
             </div>
           </div>
+          
+          <Show when={store.state.isGameStarted && store.state.currentBetCount > 0 && store.state.winBetCount == 0}>
+            <div class={`cashout ${store.state.inputBlock ? "disabled" : ""}`} onclick={handleCashoutClick}>
+              <div class="label">CASHOUT</div>
+              <div class="value-row">
+                <span class="coin-icon">$</span>
+                <span class="value">{formatCount(store.state.currentBetCount)}</span>
+              </div>
+            </div>
+          </Show>
 
           <div class="play-section">
             <div class={`bet ${store.state.isGameStarted ? "disabled" : ""}`}>

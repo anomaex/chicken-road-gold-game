@@ -12,6 +12,7 @@ import {
   playRunOverAudio,
   playCarDriveAudio,
   playWinAudio,
+  playCashoutAudio,
 } from "../systems/audio";
 
 export class Chicken extends Container {
@@ -156,6 +157,9 @@ export class Chicken extends Container {
 
         currentRoad.visibleFencing(true);
 
+        const currentBetCount = store.state.bet * this.scoreMulti;
+        store.state.currentBetCount = currentBetCount; // solidjs listen store.state.winBalance
+
         const nextRoadIndex = this.currentRoadIndex + 1; // need check what road next, after on road I jump
         if (nextRoadIndex > store.bg.roads.length - 1) {
           // Run finish event
@@ -168,10 +172,9 @@ export class Chicken extends Container {
 
           currentRoad.visibleCoinGold(true);
 
-          // SolidJS listen winScore and after finish or cashout he open notification
-          const winBalance = store.state.bet * this.scoreMulti;
-          store.state.winBalance = winBalance;
-          store.state.balance += winBalance;
+          // SolidJS listen store.state.balance
+          store.state.winBetCount = currentBetCount;
+          store.state.balance += currentBetCount;
 
           // Emulating restart
           setTimeout(() => {
@@ -245,6 +248,21 @@ export class Chicken extends Container {
   }
   //#endregion JUMP
 
+  public cashout() {
+    store.state.inputBlock = true;
+    this.isFinish = true;
+
+    playCashoutAudio();
+    
+    // SolidJS listen store.state.balance
+    store.state.winBetCount = store.state.currentBetCount;
+    store.state.balance += store.state.currentBetCount;
+
+    setTimeout(() => {
+      this.restart();
+    }, 1000);
+  }
+
   private restart() {
     store.tweenGroup.allStopped();
     store.tweenGroup.removeAll();
@@ -261,7 +279,8 @@ export class Chicken extends Container {
     this.chickenRunOverSprite.visible = false;
     this.chickenStaticSprite.visible = true;
 
-    store.state.winBalance = 0;
+    store.state.currentBetCount = 0;
+    store.state.winBetCount = 0;
     store.state.bet = 1;
 
     this.scoreMulti = 1;
