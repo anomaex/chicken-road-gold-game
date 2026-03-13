@@ -11,6 +11,7 @@ import {
   playJumpAudio,
   playRunOverAudio,
   playCarDriveAudio,
+  playWinAudio,
 } from "../systems/audio";
 
 export class Chicken extends Container {
@@ -158,21 +159,33 @@ export class Chicken extends Container {
         const nextRoadIndex = this.currentRoadIndex + 1; // need check what road next, after on road I jump
         if (nextRoadIndex > store.bg.roads.length - 1) {
           // Run finish event
+          if (this.isFinish) return;
           this.isFinish = true;
+
+          setTimeout(() => {
+            playWinAudio();
+          }, 200);
+
           currentRoad.visibleCoinGold(true);
 
           // SolidJS listen winScore and after finish or cashout he open notification
-          store.state.winScore = store.state.bet * this.scoreMulti; // 1 NEED TO CHANGE ON BET(store.state.bet) when start game
+          const winBalance = store.state.bet * this.scoreMulti;
+          store.state.winBalance = winBalance;
+          store.state.balance += winBalance;
 
           // Emulating restart
           setTimeout(() => {
             this.restart();
           }, 3000);
         } else {
+          const nextRoad = store.bg.roads[nextRoadIndex];
+          if (nextRoad) nextRoad.setBacklightScore(true);
           this.visibleScore(true);
         }
 
-        store.input.block = false;
+        setTimeout(() => {
+          store.state.inputBlock = false;
+        }, 200);
       }
     }
   }
@@ -183,8 +196,8 @@ export class Chicken extends Container {
     if (this.isFinish) return;
 
     // Block input when camera and chicken moving on next point
-    if (store.input.block) return;
-    store.input.block = true;
+    if (store.state.inputBlock) return;
+    store.state.inputBlock = true;
 
     if (this.isJump) return;
     this.isJump = true;
@@ -248,8 +261,8 @@ export class Chicken extends Container {
     this.chickenRunOverSprite.visible = false;
     this.chickenStaticSprite.visible = true;
 
-    store.state.winScore = 0;
-    store.state.bet = 0;
+    store.state.winBalance = 0;
+    store.state.bet = 1;
 
     this.scoreMulti = 1;
 
@@ -263,6 +276,8 @@ export class Chicken extends Container {
 
     this.isRunOver = false;
 
-    store.input.block = false;
+    store.state.inputBlock = false;
+
+    store.state.isGameStarted = false;
   }
 }

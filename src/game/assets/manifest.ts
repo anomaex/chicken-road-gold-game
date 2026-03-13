@@ -29,6 +29,8 @@ import jumpAudio from "./audio/jump.mp3";
 import runOverAudio from "./audio/runOver.mp3";
 import carBrakingAudio from "./audio/carBraking.mp3";
 import carDriveAudio from "./audio/carDrive.mp3";
+import winAudio from "./audio/win.mp3";
+import cashoutAudio from "./audio/cashout.mp3";
 
 export const manifest: AssetsManifest = {
   bundles: [
@@ -77,6 +79,8 @@ export const manifest: AssetsManifest = {
         { alias: "runOverSound", src: runOverAudio },
         { alias: "carBrakingSound", src: carBrakingAudio },
         { alias: "carDriveSound", src: carDriveAudio },
+        { alias: "winSound", src: winAudio },
+        { alias: "cashoutSound", src: cashoutAudio },
       ],
     },
   ],

@@ -44,10 +44,6 @@ class GameStore {
     moveTween: null as unknown as Tween,
   };
 
-  public input = {
-    block: false,
-  };
-
   public chicken!: Chicken;
 
   public bg = {
@@ -68,10 +64,12 @@ class GameStore {
 
   public state = createMutable({
     isMuted: false,
+    balance: 1000000,
     bet: 1,
-    winScore: 0,
+    winBalance: 0,
     difficulty: 0,
     isGameStarted: false,
+    inputBlock: false,
   });
 }
 
