@@ -51,7 +51,7 @@ function buildLevel() {
 export async function initGame() {
   store.app = new Application();
   await store.app.init({
-    //resizeTo: window, // pixijs auto resize to window, upd: not needed, we auto resize every game tick
+    resizeTo: window, // pixijs auto resize to window, upd: not needed, we auto resize every game tick
     resolution: window.devicePixelRatio || 1,
     autoDensity: true,
   });
@@ -63,9 +63,6 @@ export async function initGame() {
 
   store.worldContainer = new Container();
   store.app.stage.addChild(store.worldContainer);
-
-  store.uiContainer = new Container();
-  store.app.stage.addChild(store.uiContainer);
 
   buildLevel();
 

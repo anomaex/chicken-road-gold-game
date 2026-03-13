@@ -10,6 +10,7 @@ import bgFinishImg from "./images/bg/bgFinish.png";
 
 import springBoardImg from "./images/bg/decorations/springBoard.png";
 import statuePhoneImg from "./images/bg/decorations/statuePhone.png";
+import winnerWindowImg from "./images/winnerWindow.png";
 
 import chickenStaticImg from "./images/chicken/chickenStatic.png";
 import chickenScoreImg from "./images/chicken/chickenScore.png";
@@ -68,6 +69,7 @@ export const manifest: AssetsManifest = {
       assets: [
         { alias: "springBoard", src: springBoardImg },
         { alias: "statuePhone", src: statuePhoneImg },
+        { alias: "winnerWindow", src: winnerWindowImg },
       ],
     },
     // Audio

@@ -2,8 +2,8 @@
 // src/game/components/Chicken.ts
 //
 
-import { Container, Sprite, Assets, TextStyle, Text } from "pixi.js";
-import { Group } from "@tweenjs/tween.js";
+import { Container, Sprite, Assets, TextStyle, Text, Graphics } from "pixi.js";
+import { Tween, Easing, Group } from "@tweenjs/tween.js";
 
 import { store } from "../../store";
 import { moveCameraTo, shakeCameraX } from "../systems/camera";
@@ -14,6 +14,7 @@ import {
   playWinAudio,
   playCashoutAudio,
 } from "../systems/audio";
+import { resizeSpriteToWinCenter } from "../systems/resize";
 
 export class Chicken extends Container {
   public startPoint = {
@@ -40,6 +41,8 @@ export class Chicken extends Container {
   private isRunOver = false;
 
   private isFinish = false;
+
+  private winWindowContainer: Container | null = null;
 
   constructor() {
     super();
@@ -176,10 +179,12 @@ export class Chicken extends Container {
           store.state.winBetCount = currentBetCount;
           store.state.balance += currentBetCount;
 
-          // Emulating restart
+          // Start finish event
           setTimeout(() => {
-            this.restart();
-          }, 3000);
+            this.finish();
+          }, 300);
+
+          return;
         } else {
           const nextRoad = store.bg.roads[nextRoadIndex];
           if (nextRoad) nextRoad.setBacklightScore(true);
@@ -253,7 +258,9 @@ export class Chicken extends Container {
     this.isFinish = true;
 
     playCashoutAudio();
-    
+
+    this.visibleScore(false);
+
     // SolidJS listen store.state.balance
     store.state.winBetCount = store.state.currentBetCount;
     store.state.balance += store.state.currentBetCount;
@@ -263,7 +270,112 @@ export class Chicken extends Container {
     }, 1000);
   }
 
+  //#region Finish
+  private finish() {
+    const point = store.bg.finish.getFinishPoint();
+    new Tween(this, store.tweenGroup)
+      .to(point, 350)
+      .easing(Easing.Quadratic.InOut)
+      .onStart(() => {
+        moveCameraTo(point.x, point.y, 800);
+      })
+      .onComplete(() => {
+        setTimeout(() => {
+          this.jumpToGold();
+        }, 300);
+      })
+      .start();
+  }
+
+  private jumpToGold() {
+    const point = store.bg.finish.getGoldPoint();
+    new Tween(this, store.tweenGroup)
+      .to(point, 350)
+      .easing(Easing.Quadratic.InOut)
+      .onStart(() => {
+        moveCameraTo(point.x, point.y, 800);
+      })
+      .onComplete(() => {
+        this.visibleWinWindow(true);
+      })
+      .start();
+  }
+
+  private visibleWinWindow(enable: boolean) {
+    if (!this.isFinish) return;
+
+    if (!this.winWindowContainer && enable) {
+      this.winWindowContainer = new Container();
+      this.winWindowContainer.visible = false;
+      store.app.stage.addChild(this.winWindowContainer);
+
+      const backgroundShadow = new Graphics();
+      backgroundShadow.rect(
+        0,
+        0,
+        store.app.screen.width,
+        store.app.screen.height,
+      );
+      backgroundShadow.fill({
+        color: "black",
+        alpha: 0.5,
+      });
+      this.winWindowContainer.addChild(backgroundShadow);
+
+      const containerSprite = new Container();
+      this.winWindowContainer.addChild(containerSprite);
+
+      const winWindowSprite = new Sprite({
+        texture: Assets.get("winnerWindow"),
+        anchor: { x: 0.5, y: 0.5 },
+      });
+      containerSprite.addChild(winWindowSprite);
+
+      resizeSpriteToWinCenter(winWindowSprite, containerSprite);
+
+      const restartBtn = new Graphics();
+      restartBtn.rect(-239, 125, 233, 125);
+      restartBtn.fill({
+        color: "black",
+        alpha: 0,
+      });
+      restartBtn.eventMode = "static";
+      restartBtn.cursor = "pointer";
+      restartBtn.on("pointerdown", () => {
+        this.restart();
+      });
+      containerSprite.addChild(restartBtn);
+
+      const gitHubBtn = new Graphics();
+      gitHubBtn.rect(0, 125, 233, 125);
+      gitHubBtn.fill({
+        color: "black",
+        alpha: 0,
+      });
+      gitHubBtn.eventMode = "static";
+      gitHubBtn.cursor = "pointer";
+      gitHubBtn.on("pointerdown", () => {
+        window.open(
+          "https://github.com/anomaex/chicken-road-gold-game",
+          "_blank",
+        );
+      });
+      containerSprite.addChild(gitHubBtn);
+    }
+
+    if (this.winWindowContainer) {
+      if (enable) {
+        this.winWindowContainer.visible = true;
+      } else {
+        this.winWindowContainer.visible = false;
+      }
+    }
+  }
+  //#endregion Finish
+
   private restart() {
+    this.visibleWinWindow(false);
+
     store.tweenGroup.allStopped();
     store.tweenGroup.removeAll();
     store.tweenGroup = new Group();

@@ -13,6 +13,10 @@ npm install solid-js
 npm install -D vite-plugin-solid
 ```
 
+#### In future:
+- Better change audio library fromv @pixi/sound to howler.js(Audio Sprites base64 overhead, library size, for ui solidjs).
+- Add an API to process requests from the server.
+
 ##### All images from source resizable and compressed:
 - max 1280 heigh, because the level.
 - export images from source to .webp(lighter size than .png), use compress, сompare quality and choose.

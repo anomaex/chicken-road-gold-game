@@ -1,0 +1,17 @@
+/*
+   src/ui/components/top/Logo.css
+*/
+
+.logo-wrapper {
+    position: fixed;
+    top: 1%;
+    left: 1%;
+    z-index: 9999;
+}
+
+.logo-image {
+    width: 15vh;
+    height: auto;
+    display: block;
+    pointer-events: none;
+}
