@@ -2,117 +2,6 @@
    src/ui/components/bottom/BottomMenu.css
 */
 
-.bottom-menu-overlay {
-   position: absolute;
-   bottom: 0;
-   left: 0;
-   width: 100%;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-sizing: border-box;
-
-   padding: 1.25vh;
-}
-
-.bottom-menu-bar {
-  width: 100%;
-  max-width: 800px;
-
-  background-color: #111111;
-
-  border-radius: 15px;
-  padding: 10px;
-  
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  color: #fff;
-  pointer-events: auto;
-
-  & .section {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-
-  /* Style for balance, bet, difficulty, ... */
-  & .info {
-    background: #272727;
-    border-radius: 10px;
-    padding: 15px 20px;
-    min-width: 120px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  & .label {
-    color: #8d8d8d;
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  & .value-row {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: white;
-    font-size: 22px;
-    line-height: 0.7;
-  }
-
-  & .coin-icon {
-    font-size: 12px;    
-  }
-
-  & .play-button {
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle, #54dc7d 0%, #2a8f4a 100%);
-    border: 4px solid #111;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 20px rgba(84, 220, 125, 0.4);
-    transform: scale(1.1); 
-    transition: transform 0.1s;
-  }
-
-  & .play-button:active {
-    transform: scale(1);
-  }
-
-  & .play-icon {
-    width: 0;
-    height: 0;
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent;
-    border-left: 20px solid white;
-    margin-left: 5px;
-  }
-
-  & .arrows {
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-  }
-
-  & .arrows button {
-    background: none;
-    border: none;
-    color: #555;
-    font-size: 8px;
-    cursor: pointer;
-    padding: 2px;
-  }
-
-  &.arrows button:hover { color: white; }
-}
-
 .bottom-shadow-gradient {
   position: absolute;
   bottom: 0;
@@ -125,4 +14,214 @@
     rgba(0, 0, 0, 0.8) 0%,
     rgba(0, 0, 0, 0) 100%
   );
+}
+
+.bottom-menu-overlay {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   padding: 1.25vh;
+}
+
+.bottom-menu-bar {
+  display: flex;
+
+  width: 100%;
+  max-width: 800px;
+
+  border-radius: 15px;
+  padding: 10px;
+  pointer-events: auto;
+  
+  background-color: #161616;
+  color: #fff;
+
+  height: 100px;
+  
+  & .label {
+    color: #8d8d8d;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  & .balance {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: auto;
+    border-radius: 10px;
+    padding: 15px;
+    background: #242424;
+
+    & .value-row {
+      display: flex;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      gap: 5px;
+      
+      & .coin-icon {
+        font-size: 12px;    
+      }
+    }
+  }
+  
+  & .play-section {
+    display: flex;
+    flex-direction: row;
+
+    & .bet {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      border-radius: 10px;
+      background: #242424;
+      border: 2px solid #535353;
+      width: 180px;
+
+      & .col-first {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 13px;
+      }
+
+      & .value-input {
+        /* Reset */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: none;
+        background: transparent;
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        font-family: inherit;
+        font-size: inherit;
+        -webkit-tap-highlight-color: transparent;
+
+        color: #fff;
+        width: 80px;
+      }
+
+      & .value-row {
+        display: flex;
+        align-items: center;
+        color: white;
+        font-size: 18px;
+        gap: 5px;
+        
+        & .coin-icon {
+          font-size: 12px;    
+        }
+      }
+
+      & .col-second {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 4px;
+
+        & button {
+          background-color: #353535;
+          border: 1px solid #535353;
+          border-radius: 7px;
+          color: #a7a7a7;
+          font-size: 20px;
+          cursor: pointer;
+          padding: 3px 8px;
+          z-index: 110;
+        }
+
+        & button:hover {
+          background-color: #696969;
+          color: #ffffff;
+        }
+      }
+    }
+
+    & .bet:hover { background-color: #2b2b2b; }
+
+    & .bet.disabled {
+      pointer-events: none;
+    }
+
+    & .play {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      width: 120px;
+
+      & .icon {
+        margin-left: auto;
+        margin-right: auto;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, #d9ffdf 0%, #4fff84 50%, #276139 100%);
+        border: 8px solid #161616;
+        border-radius: 100%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: scale(1.18);
+        transition: transform 0.1s;
+        color: #1a492e;
+        font-size: 24px;
+        font-weight: bold;
+
+        &:active { transform: scale(1); }
+      }
+    }
+
+    & .difficulty {
+      text-align: right;
+      cursor: pointer;
+      position: relative;
+
+      & .value-select {
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      
+      & .option-list {
+        position: absolute;
+        overflow: hidden;
+        bottom: calc(100% + 17px);
+        left: 0;
+        width: 100%;
+        background-color: #161616;
+        box-shadow: 0 0 5px 2px rgba(0,0,0,0.5);
+        border-radius: 10px;
+        min-height: 100px;
+
+        & .option-item {
+          padding: 13px 16px;
+          color: #ccc;
+          font-size: 14px;
+          border-bottom: 1px solid #222;
+          text-align: left;
+          text-transform: uppercase;
+
+          &:last-child { border-bottom: none; }
+          
+          &:hover {
+            background-color: #292929;
+            color: #fff;
+          }
+
+          &.selected {
+            color: #6aff82;
+            background: #1e1e1e;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
 }

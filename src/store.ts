@@ -68,8 +68,10 @@ class GameStore {
 
   public state = createMutable({
     isMuted: false,
-    bet: 0,
+    bet: 1,
     winScore: 0,
+    difficulty: 0,
+    isGameStarted: false,
   });
 }
 

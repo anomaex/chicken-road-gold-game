@@ -162,7 +162,7 @@ export class Chicken extends Container {
           currentRoad.visibleCoinGold(true);
 
           // SolidJS listen winScore and after finish or cashout he open notification
-          store.state.winScore = 1 * this.scoreMulti; // 1 NEED TO CHANGE ON BET(store.state.bet) when start game
+          store.state.winScore = store.state.bet * this.scoreMulti; // 1 NEED TO CHANGE ON BET(store.state.bet) when start game
 
           // Emulating restart
           setTimeout(() => {

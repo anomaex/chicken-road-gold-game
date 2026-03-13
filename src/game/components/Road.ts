@@ -11,7 +11,6 @@ import { playCarBrakingAudio } from "../systems/audio";
 import { store } from "../../store";
 
 export class Road extends Container {
-  private id: number;
   private coinBronzeContainer!: Container;
   private scoreText!: Text;
 
@@ -31,7 +30,6 @@ export class Road extends Container {
   constructor(id: number, x: number = 0) {
     super();
 
-    this.id = id;
     this.x = x;
 
     new Sprite({
@@ -43,8 +41,6 @@ export class Road extends Container {
     this.scoreMulti = calculateMultiplier(id + 1);
 
     this.addObjects();
-
-    if (this.id == 0) this.setBacklightScore(true);
   }
 
   private addObjects() {
@@ -239,8 +235,7 @@ export class Road extends Container {
 
   public restart() {
     this.removeCar();
-    if (this.id == 0) this.setBacklightScore(true);
-    else this.setBacklightScore(false);
+    this.setBacklightScore(false);
     this.visibleCoinGold(false);
     this.visibleCoinBronze(true);
     this.visibleFencing(false);
