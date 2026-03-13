@@ -5,7 +5,7 @@ import { createSignal, Show, For } from "solid-js";
 
 import "./BottomMenu.css";
 
-import { store } from "../../../store";
+import { store } from "../../../shared/store";
 
 export const BottomMenu = () => {
   const [isOpen, setIsOpen] = createSignal(false);
@@ -80,6 +80,7 @@ export const BottomMenu = () => {
     e.stopPropagation();
     store.state.difficulty = getDifficultyIndex(opt);
     setIsOpen(false);
+    store.levelManager.rebuildRoads();
   };
 
   const handlePlayBtnClick = () => {
@@ -148,6 +149,7 @@ export const BottomMenu = () => {
                     <input
                       type="number"
                       inputmode="decimal"
+                      id="bet-count"
                       class="value-input"
                       placeholder="0"
                       value={store.state.bet}

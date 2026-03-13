@@ -8,7 +8,7 @@ import { Tween, Easing } from "@tweenjs/tween.js";
 import { calculateMultiplier } from "../systems/score";
 import { playCarBrakingAudio } from "../systems/audio";
 
-import { store } from "../../store";
+import { store } from "../../shared/store";
 
 export class Road extends Container {
   private coinBronzeContainer!: Container;

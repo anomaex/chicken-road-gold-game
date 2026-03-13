@@ -4,7 +4,7 @@
 
 import { sound } from "@pixi/sound";
 
-import { store } from "../../store";
+import { store } from "../../shared/store";
 
 export const initAudio = () => {
   const toggleMute = (isMuted: boolean) => {

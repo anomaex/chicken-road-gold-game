@@ -3,7 +3,7 @@
 //
 
 import { Container, Sprite } from "pixi.js";
-import { store } from "../../store";
+import { store } from "../../shared/store";
 
 function resize() {
   const screenWidth = window.innerWidth;

@@ -3,7 +3,7 @@
 //
 
 import { FederatedPointerEvent } from "pixi.js";
-import { store } from "../../store";
+import { store } from "../../shared/store";
 
 export function initInput() {
   const app = store.app;

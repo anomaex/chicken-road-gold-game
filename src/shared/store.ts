@@ -1,20 +1,23 @@
 //
-// src/store.ts
+// src/shared/store.ts
 //
 
 import { Application, Container } from "pixi.js";
 import { Group, Tween } from "@tweenjs/tween.js";
 import { createMutable } from "solid-js/store";
 
-import { Start } from "./game/components/Start";
-import { Road } from "./game/components/Road";
-import { Finish } from "./game/components/Finish";
-import { Chicken } from "./game/components/Chicken";
+import { Start } from "../game/world/Start";
+import { Road } from "../game/world/Road";
+import { Finish } from "../game/world/Finish";
+import { Chicken } from "../game/entites/Chicken";
+import { LevelManager } from "../game/world/LevelManager";
 
 class GameStore {
   public app!: Application;
 
   public worldContainer!: Container;
+
+  public levelManager!: LevelManager;
 
   public screen = {
     width: 0,
@@ -25,10 +28,10 @@ class GameStore {
     width: 720, // dynamic, change when level is build
     height: 1280,
     difficulty: {
-      easy: 3, // 30 default
-      medium: 25, // 25
-      hard: 22, // 22
-      hardcore: 18, // 18
+      easy: 8,
+      medium: 13,
+      hard: 18,
+      hardcore: 23,
     },
   };
 

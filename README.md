@@ -18,7 +18,7 @@ npm install -D vite-plugin-solid
 - Add an API to process requests from the server.
 
 ##### All images from source resizable and compressed:
-- max 1280 heigh, because the level.
+- max 1280 height, because the level.
 - export images from source to .webp(lighter size than .png), use compress, сompare quality and choose.
 
 ##### Alls audio used to convert from source to new .mp3 files, prefer:

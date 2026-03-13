@@ -6,7 +6,7 @@ import { createEffect, createSignal, Show } from "solid-js";
 
 import "./WinNotify.css";
 
-import { store } from "../../../store";
+import { store } from "../../../shared/store";
 
 export const WinNotify = () => {
   const [isVisible, setIsVisible] = createSignal(false);

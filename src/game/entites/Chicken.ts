@@ -5,7 +5,7 @@
 import { Container, Sprite, Assets, TextStyle, Text, Graphics } from "pixi.js";
 import { Tween, Easing, Group } from "@tweenjs/tween.js";
 
-import { store } from "../../store";
+import { store } from "../../shared/store";
 import { moveCameraTo, shakeCameraX } from "../systems/camera";
 import {
   playJumpAudio,
@@ -332,6 +332,7 @@ export class Chicken extends Container {
       containerSprite.addChild(winWindowSprite);
 
       resizeSpriteToWinCenter(winWindowSprite, containerSprite);
+      containerSprite.y += 30;
 
       const restartBtn = new Graphics();
       restartBtn.rect(-239, 125, 233, 125);

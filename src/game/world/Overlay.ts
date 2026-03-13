@@ -3,7 +3,7 @@
 //
 
 import { Container, Sprite, Assets } from "pixi.js";
-import { store } from "../../store";
+import { store } from "../../shared/store";
 
 export class Overlay extends Container {
   constructor(x: number = 0, y: number = 0) {
