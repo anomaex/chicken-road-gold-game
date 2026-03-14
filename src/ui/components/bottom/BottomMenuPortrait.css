@@ -13,7 +13,7 @@
    justify-content: space-between;
    justify-content: flex-end;
    font-size: 30px;
-   width: 780px;
+   width: 2048px; /* need for  */
 
   & .label {
     color: #8d8d8d;
