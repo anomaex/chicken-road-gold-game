@@ -46,17 +46,13 @@ export class LevelManager {
   public rebuildRoads() {
     const difficultyIndex = store.state.difficulty;
     let roadCounts = 0;
-    if (difficultyIndex == 0)
-      roadCounts = store.level.difficulty.easy;
-    else if (difficultyIndex == 1)
-      roadCounts = store.level.difficulty.medium;
-    else if (difficultyIndex == 2)
-      roadCounts = store.level.difficulty.hard;
-    else if (difficultyIndex == 3)
-      roadCounts = store.level.difficulty.hardcore;
+    if (difficultyIndex == 0) roadCounts = store.level.difficulty.easy;
+    else if (difficultyIndex == 1) roadCounts = store.level.difficulty.medium;
+    else if (difficultyIndex == 2) roadCounts = store.level.difficulty.hard;
+    else if (difficultyIndex == 3) roadCounts = store.level.difficulty.hardcore;
 
     const currentRoadCounts = store.bg.roads.length;
-    
+
     let x = store.bg.start.width - 10;
 
     const countsToDelete = currentRoadCounts - roadCounts;
@@ -68,7 +64,7 @@ export class LevelManager {
       store.bg.roads.length = store.bg.roads.length - countsToDelete;
     }
 
-    for(let i = 0; i < roadCounts; i++) {
+    for (let i = 0; i < roadCounts; i++) {
       if (i < currentRoadCounts) {
         const road = store.bg.roads[i];
         road.restart();
@@ -80,7 +76,7 @@ export class LevelManager {
         x += road.width;
       }
     }
-    
+
     x -= 7; // last road marking
 
     store.bg.finish.x = x;

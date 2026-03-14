@@ -15,6 +15,7 @@ import {
   playCashoutAudio,
 } from "../systems/audio";
 import { resizeSpriteToWinCenter } from "../systems/resize";
+import { mraidSystem } from "../systems/mraid";
 
 export class Chicken extends Container {
   public startPoint = {
@@ -356,10 +357,7 @@ export class Chicken extends Container {
       gitHubBtn.eventMode = "static";
       gitHubBtn.cursor = "pointer";
       gitHubBtn.on("pointerdown", () => {
-        window.open(
-          "https://github.com/anomaex/chicken-road-gold-game",
-          "_blank",
-        );
+        mraidSystem.openStore("https://github.com/anomaex/chicken-road-gold-game")
       });
       containerSprite.addChild(gitHubBtn);
     }

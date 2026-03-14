@@ -14,7 +14,7 @@ import { initAudio } from "./systems/audio";
 import { LevelManager } from "./world/LevelManager";
 
 export class Game {
-  public async init (parentElement: HTMLElement) {
+  public async init(parentElement: HTMLElement) {
     const app = new Application();
     store.app = app;
 

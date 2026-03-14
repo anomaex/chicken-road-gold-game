@@ -1,0 +1,15 @@
+/*
+   src/ui/components/bottom/AdaptiveBlock.css
+*/
+
+.bottom-menu-wrapper {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+}
+
+.bottom-menu-resizer {
+    display: flex;
+}

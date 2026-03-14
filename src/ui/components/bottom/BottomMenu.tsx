@@ -6,6 +6,7 @@ import { createSignal, Show, For } from "solid-js";
 import "./BottomMenu.css";
 
 import { store } from "../../../shared/store";
+import { AdaptiveBlock } from "./AdaptiveBlock";
 
 export const BottomMenu = () => {
   const [isOpen, setIsOpen] = createSignal(false);
@@ -105,125 +106,120 @@ export const BottomMenu = () => {
 
   return (
     <Show when={store.state.winBetCount <= 0}>
-      <div class="bottom-menu-wrapper">
-        <div class="bottom-shadow-gradient" />
-        <div class="bottom-menu-overlay">
-          <div class="bottom-menu-bar">
-            <div class="balance">
-              <div class="label">BALANCE</div>
+      <div class="bottom-shadow-gradient" />
+      <AdaptiveBlock>
+        <div class="bottom-menu-bar">
+          <div class="balance">
+            <div class="label">BALANCE</div>
+            <div class="value-row">
+              <span class="coin-icon">$</span>
+              <span class="value">
+                {store.state.balance.toLocaleString("en-US")}
+              </span>
+            </div>
+          </div>
+
+          <Show
+            when={
+              store.state.isGameStarted &&
+              store.state.currentBetCount > 0 &&
+              store.state.winBetCount == 0
+            }
+          >
+            <div class={`cashout ${store.state.inputBlock ? "disabled" : ""}`} onclick={handleCashoutClick} >
+              <div class="label">CASHOUT</div>
               <div class="value-row">
                 <span class="coin-icon">$</span>
                 <span class="value">
-                  {store.state.balance.toLocaleString("en-US")}
+                  {formatCount(store.state.currentBetCount)}
                 </span>
               </div>
             </div>
+          </Show>
 
-            <Show
-              when={
-                store.state.isGameStarted &&
-                store.state.currentBetCount > 0 &&
-                store.state.winBetCount == 0
-              }
-            >
-              <div
-                class={`cashout ${store.state.inputBlock ? "disabled" : ""}`}
-                onclick={handleCashoutClick}
-              >
-                <div class="label">CASHOUT</div>
+          <div class="play-section">
+            <div class={`bet ${store.state.isGameStarted ? "disabled" : ""}`}>
+              <div class="col-first">
+                <div class="label">BET</div>
                 <div class="value-row">
                   <span class="coin-icon">$</span>
-                  <span class="value">
-                    {formatCount(store.state.currentBetCount)}
-                  </span>
+                  <input
+                    type="number"
+                    inputmode="decimal"
+                    id="bet-count"
+                    class="value-input"
+                    placeholder="0"
+                    value={store.state.bet}
+                    onInput={handleInput}
+                  />
                 </div>
               </div>
-            </Show>
+              <div class="col-second">
+                <button class="arrow-up" onClick={increment}>
+                  ▲
+                </button>
+                <button class="arrow-down" onClick={decrement}>
+                  ▼
+                </button>
+              </div>
+            </div>
 
-            <div class="play-section">
-              <div class={`bet ${store.state.isGameStarted ? "disabled" : ""}`}>
-                <div class="col-first">
-                  <div class="label">BET</div>
-                  <div class="value-row">
-                    <span class="coin-icon">$</span>
-                    <input
-                      type="number"
-                      inputmode="decimal"
-                      id="bet-count"
-                      class="value-input"
-                      placeholder="0"
-                      value={store.state.bet}
-                      onInput={handleInput}
-                    />
-                  </div>
-                </div>
-                <div class="col-second">
-                  <button class="arrow-up" onClick={increment}>
-                    ▲
-                  </button>
-                  <button class="arrow-down" onClick={decrement}>
-                    ▼
-                  </button>
-                </div>
+            <div class="play">
+              <div class="icon" onclick={handlePlayBtnClick}>
+                {store.state.isGameStarted ? "Go" : "Play"}
               </div>
+            </div>
 
-              <div class="play">
-                <div class="icon" onclick={handlePlayBtnClick}>
-                  {store.state.isGameStarted ? "Go" : "Play"}
+            <div
+              class={`bet difficulty ${store.state.isGameStarted ? "disabled" : ""}`}
+              onClick={() => setIsOpen(!isOpen())}
+            >
+              <div class="col-second">
+                <button
+                  class="arrow-up"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeDifficulty(true);
+                  }}
+                >
+                  ▲
+                </button>
+                <button
+                  class="arrow-down"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    changeDifficulty(false);
+                  }}
+                >
+                  ▼
+                </button>
+              </div>
+              <div class="col-first">
+                <div class="label">DIFFICULTY</div>
+                <div class="value-select">
+                  {getDifficyltyName(store.state.difficulty)}
                 </div>
               </div>
-
-              <div
-                class={`bet difficulty ${store.state.isGameStarted ? "disabled" : ""}`}
-                onClick={() => setIsOpen(!isOpen())}
-              >
-                <div class="col-second">
-                  <button
-                    class="arrow-up"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      changeDifficulty(true);
-                    }}
-                  >
-                    ▲
-                  </button>
-                  <button
-                    class="arrow-down"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      changeDifficulty(false);
-                    }}
-                  >
-                    ▼
-                  </button>
+              <Show when={isOpen()}>
+                <div class="option-list">
+                  <For each={options}>
+                    {(option) => (
+                      <div
+                        class={`option-item ${getDifficyltyName(store.state.difficulty) === option ? "selected" : ""}`}
+                        onClick={(e) => {
+                          handleSelect(option, e);
+                        }}
+                      >
+                        {option}
+                      </div>
+                    )}
+                  </For>
                 </div>
-                <div class="col-first">
-                  <div class="label">DIFFICULTY</div>
-                  <div class="value-select">
-                    {getDifficyltyName(store.state.difficulty)}
-                  </div>
-                </div>
-                <Show when={isOpen()}>
-                  <div class="option-list">
-                    <For each={options}>
-                      {(option) => (
-                        <div
-                          class={`option-item ${getDifficyltyName(store.state.difficulty) === option ? "selected" : ""}`}
-                          onClick={(e) => {
-                            handleSelect(option, e);
-                          }}
-                        >
-                          {option}
-                        </div>
-                      )}
-                    </For>
-                  </div>
-                </Show>
-              </div>
+              </Show>
             </div>
           </div>
         </div>
-      </div>
+      </AdaptiveBlock>
     </Show>
   );
 };
