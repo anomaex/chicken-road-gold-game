@@ -1,9 +1,10 @@
 //
 // src/ui/components/bottom/BottomMenu.tsx
 //
-import { createSignal, Show, For } from "solid-js";
+import { createSignal, Show, For, onMount, onCleanup } from "solid-js";
 
 import "./BottomMenu.css";
+import "./BottomMenuPortrait.css";
 
 import { store } from "../../../shared/store";
 import { AdaptiveBottomMenu } from "./AdaptiveBottomMenu";
@@ -71,14 +72,14 @@ export const BottomMenu = () => {
     let newIndex = increase ? currentIndex + 1 : currentIndex - 1;
     if (newIndex < 0) newIndex = 0;
     if (newIndex >= options.length) newIndex = options.length - 1;
-    store.state.difficulty = newIndex;
+    handleSelect(getDifficyltyName(newIndex), null);
   };
 
-  const handleSelect = (opt: string, e: MouseEvent) => {
+  const handleSelect = (opt: string, e: MouseEvent | null) => {
     if (store.state.isGameStarted) return;
     if (store.state.inputBlock) return;
 
-    e.stopPropagation();
+    e?.stopPropagation();
     store.state.difficulty = getDifficultyIndex(opt);
     setIsOpen(false);
     store.levelManager.rebuildRoads();
@@ -104,11 +105,25 @@ export const BottomMenu = () => {
     store.chicken.cashout();
   };
 
+  const [isPortrain, setIsPortrait] = createSignal(false);
+
+  const handleResolution = () => {
+    if (window.innerWidth < window.innerHeight)
+      setIsPortrait(true)
+    else
+      setIsPortrait(false)
+  };
+  onMount(() => {
+    handleResolution();
+    window.addEventListener("resize", handleResolution);
+  });
+  onCleanup(() => window.removeEventListener("resize", handleResolution));
+  
   return (
     <Show when={store.state.winBetCount <= 0}>
       <div class="bottom-shadow-gradient" />
       <AdaptiveBottomMenu>
-        <div class="bottom-menu-bar">
+        <div class={isPortrain() ? "bottom-menu-portrait" : "bottom-menu-bar"}>
           <div class="balance">
             <div class="label">BALANCE</div>
             <div class="value-row">

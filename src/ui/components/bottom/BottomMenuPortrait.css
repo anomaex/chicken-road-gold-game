@@ -1,0 +1,272 @@
+/*
+   src/ui/components/bottom/BottomMenuPortrait.css
+*/
+
+.bottom-menu-portrait {
+   display: flex;
+   width: 100%;
+   flex-direction: column;
+   background-color: #161616;
+   color: #fff;
+   font-size: 30px;
+   pointer-events: auto;
+   justify-content: space-between;
+   justify-content: flex-end;
+   font-size: 30px;
+   width: 780px;
+
+  & .label {
+    color: #8d8d8d;
+    font-weight: bold;
+  }
+
+   & .coin-icon {
+      font-size: 20px;    
+      width: 30px;
+      height: 30px;
+   }
+
+  & .balance {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 24px;
+    background: #242424;
+    align-items: center;
+    align-content: center;
+
+    order: 3;
+
+    & .value-row {
+      display: flex;
+      align-items: center;
+      color: inherit;
+      gap: 10px;
+      font-size: 34px;
+      
+      & .coin-icon {
+         width: 30px;
+         height: 30px;
+         font-size: 24px;
+      }
+    }
+  }
+  
+  & .cashout {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+    padding: 30px;
+    background-color: #ffc916;
+    color: #000000;
+    cursor: pointer;
+    font-size: 32px;
+
+    & .label {
+      color: inherit;
+   }
+
+    & .value-row {
+      display: flex;
+      align-items: center;
+      font-size: inherit;
+      gap: 10px;
+
+      & .coin-icon {
+         background-color: #000000;
+         color: #ffc916;
+      }
+    }
+
+    &:hover {
+      background-color: #806200;
+      color: #ffc916;
+
+      & .coin-icon {
+        background-color: #ffc916;
+        color: #806200;
+      }
+    }
+  }
+
+  & .cashout.disabled {
+    pointer-events: none;
+    background-color: #252525;
+    color: #797979;
+
+    & .coin-icon {
+      background-color: #797979;
+      color: #252525;
+    }
+  }
+
+  & .play-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+
+    & .bet {
+      display: flex;
+      justify-content: space-between;
+      border-radius: 10px;
+      background: #242424;
+      border: 2px solid #535353;
+      width: 270px;
+
+      & .col-first {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 5px;
+      }
+
+      & .value-input {
+        /* Reset */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border: none;
+        background: transparent;
+        outline: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        font-family: inherit;
+        font-size: inherit;
+        -webkit-tap-highlight-color: transparent;
+
+        color: #ffffff;
+        width: 130px;
+      }
+
+      & .value-row {
+        display: flex;
+        align-items: center;
+        color: white;
+        font-size: 40px;
+        gap: 5px;
+      }
+
+      & .col-second {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        & button {
+          background-color: #353535;
+          border: 1px solid #535353;
+          border-radius: 7px;
+          color: inherit;
+          font-size: 28px;
+          cursor: pointer;
+          padding: 16px 25px;
+
+         }
+
+        & button:hover {
+          background-color: #696969;
+          color: #ffffff;
+        }
+      }
+    }
+
+    & .bet:hover { background-color: #2b2b2b; }
+
+    & .bet.disabled {
+      pointer-events: none;
+      background-color: #1f1f1f;
+      color: #c4c4c4;
+
+      & .label {
+        color: #777777;
+      }
+
+      & input {
+        color: #c4c4c4;
+      }
+
+      & .coin-icon {
+        background-color: #c4c4c4;
+      }
+    }
+
+    & .play {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      align-items: center;
+      height: 140px;
+
+      & .icon {
+        margin-left: auto;
+        margin-right: auto;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, #d9ffdf 0%, #4fff84 50%, #276139 100%);
+        border: 8px solid #161616;
+        border-radius: 100%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: scale(1.75);
+        transition: transform 0.1s;
+        color: #1a492e;
+        font-size: 36px;
+        font-weight: bold;
+
+        &:active { transform: scale(1); }
+
+        &:hover {
+          color: #000000;
+          background: radial-gradient(circle, #d9ffdf 0%, #92dba8 50%, #c6ffd8 100%);
+        }
+      }
+    }
+
+    & .difficulty {
+      text-align: right;
+      cursor: pointer;
+      width: 270px;
+
+      & .value-select {
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      
+      & .option-list {
+        position: absolute;
+        overflow: hidden;
+        bottom: calc(100% + 17px);
+        left: 0;
+        width: 100%;
+        background-color: #161616;
+        box-shadow: 0 0 5px 2px rgba(0,0,0,0.5);
+        border-radius: 10px;
+        min-height: 100px;
+
+        & .option-item {
+          padding: 13px 16px;
+          color: #cccccc;
+          font-size: 14px;
+          border-bottom: 1px solid #222;
+          text-align: left;
+          text-transform: uppercase;
+
+          &:last-child { border-bottom: none; }
+          
+          &:hover {
+            background-color: #292929;
+            color: #fff;
+          }
+
+          &.selected {
+            color: #6aff82;
+            background: #1e1e1e;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

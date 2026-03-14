@@ -8,30 +8,30 @@ import "./AdaptiveBottomMenu.css";
 
 export const AdaptiveBottomMenu: ParentComponent = (props) => {
   const DESIGN_BLOCK_WIDTH = 780;
-  const height = 100;
 
   const calculateMetrics = () => {
     let scale = 1;
-    const full_width = DESIGN_BLOCK_WIDTH + 20;
+    const full_width = DESIGN_BLOCK_WIDTH;
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
     const isLandscape = windowWidth > windowHeight;
 
     if (windowWidth < full_width) {
-      scale = Math.min(windowWidth / full_width, windowHeight / height);
+      scale = Math.min(windowWidth / full_width);
     }
 
     if (isLandscape && windowHeight < full_width) {
-      scale = scale * 0.7;
+      scale = scale * 0.8;
     }
 
-    return { scale, windowWidth };
+    return { scale, windowWidth, isLandscape };
   };
 
   const [metrics, setMetrics] = createSignal(calculateMetrics());
 
   const handleResize = () => {
+
     setMetrics(calculateMetrics());
   };
 
@@ -44,7 +44,9 @@ export const AdaptiveBottomMenu: ParentComponent = (props) => {
   });
 
   return (
-    <div class="bottom-menu-wrapper">
+    <div class="bottom-menu-wrapper" style={{
+      padding: `${metrics().isLandscape ? '10px' : '0'}`,
+    }}>
       <div
         class="bottom-menu-resizer"
         style={{
@@ -52,7 +54,6 @@ export const AdaptiveBottomMenu: ParentComponent = (props) => {
             metrics().windowWidth < DESIGN_BLOCK_WIDTH
               ? `${DESIGN_BLOCK_WIDTH}px`
               : "100%",
-          height: `${height}px`,
           transform: `scale(${metrics().scale})`,
         }}
       >
