@@ -31,7 +31,6 @@ export const AdaptiveBottomMenu: ParentComponent = (props) => {
   const [metrics, setMetrics] = createSignal(calculateMetrics());
 
   const handleResize = () => {
-
     setMetrics(calculateMetrics());
   };
 
@@ -44,9 +43,12 @@ export const AdaptiveBottomMenu: ParentComponent = (props) => {
   });
 
   return (
-    <div class="bottom-menu-wrapper" style={{
-      padding: `${metrics().isLandscape ? '10px' : '0'}`,
-    }}>
+    <div
+      class="bottom-menu-wrapper"
+      style={{
+        padding: `${metrics().isLandscape ? "10px" : "0"}`,
+      }}
+    >
       <div
         class="bottom-menu-resizer"
         style={{

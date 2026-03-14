@@ -108,17 +108,15 @@ export const BottomMenu = () => {
   const [isPortrain, setIsPortrait] = createSignal(false);
 
   const handleResolution = () => {
-    if (window.innerWidth < window.innerHeight)
-      setIsPortrait(true)
-    else
-      setIsPortrait(false)
+    if (window.innerWidth < window.innerHeight) setIsPortrait(true);
+    else setIsPortrait(false);
   };
   onMount(() => {
     handleResolution();
     window.addEventListener("resize", handleResolution);
   });
   onCleanup(() => window.removeEventListener("resize", handleResolution));
-  
+
   return (
     <Show when={store.state.winBetCount <= 0}>
       <div class="bottom-shadow-gradient" />

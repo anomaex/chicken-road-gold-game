@@ -77,12 +77,12 @@ export class Road extends Container {
       eventMode: "static",
       cursor: "pointer",
       children: [
-      new Sprite({
-        texture: Assets.get("coinBronze"),
-        anchor: { x: 0.5, y: 0.5 },
-        parent: this.coinBronzeContainer,
-      }),
-      this.scoreText,
+        new Sprite({
+          texture: Assets.get("coinBronze"),
+          anchor: { x: 0.5, y: 0.5 },
+          parent: this.coinBronzeContainer,
+        }),
+        this.scoreText,
       ],
     });
 

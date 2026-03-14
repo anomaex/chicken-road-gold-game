@@ -13,11 +13,11 @@ export function initInput() {
   let isPointerDown = false;
   let startX = 0;
   let startY = 0;
-  let startTime = 0;
+  //let startTime = 0;
 
   // Настройки чувствительности
-  const CLICK_THRESHOLD = 10; // Макс расстояние в пикселях для клика
-  const TIME_THRESHOLD = 250; // Макс время в мс для клика
+  //const CLICK_THRESHOLD = 10; // Макс расстояние в пикселях для клика
+  //const TIME_THRESHOLD = 250; // Макс время в мс для клика
 
   const DRAG_THRESHOLD = 5;
 
@@ -31,7 +31,7 @@ export function initInput() {
     isPointerDown = true;
     startX = e.global.x;
     startY = e.global.y;
-    startTime = Date.now();
+    //startTime = Date.now();
   });
 
   app.stage.on("pointermove", (e: FederatedPointerEvent) => {
