@@ -74,14 +74,20 @@ export class Road extends Container {
       x: centerX,
       y: store.chicken.startPoint.y,
       parent: this,
+      eventMode: "static",
+      cursor: "pointer",
       children: [
-        new Sprite({
-          texture: Assets.get("coinBronze"),
-          anchor: { x: 0.5, y: 0.5 },
-          parent: this.coinBronzeContainer,
-        }),
-        this.scoreText,
+      new Sprite({
+        texture: Assets.get("coinBronze"),
+        anchor: { x: 0.5, y: 0.5 },
+        parent: this.coinBronzeContainer,
+      }),
+      this.scoreText,
       ],
+    });
+
+    this.coinBronzeContainer.on("pointerdown", () => {
+      store.chicken?.jump();
     });
 
     // Gold coint
