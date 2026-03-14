@@ -126,7 +126,10 @@ export const BottomMenu = () => {
               store.state.winBetCount == 0
             }
           >
-            <div class={`cashout ${store.state.inputBlock ? "disabled" : ""}`} onclick={handleCashoutClick} >
+            <div
+              class={`cashout ${store.state.inputBlock ? "disabled" : ""}`}
+              onclick={handleCashoutClick}
+            >
               <div class="label">CASHOUT</div>
               <div class="value-row">
                 <span class="coin-icon">$</span>

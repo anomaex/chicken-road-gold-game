@@ -1,4 +1,4 @@
-import { Component, createSignal, onCleanup, ParentComponent, onMount, children } from "solid-js";
+import { createSignal, onCleanup, ParentComponent, onMount } from "solid-js";
 
 import "./AdaptiveBlock.css";
 
@@ -10,8 +10,11 @@ export const AdaptiveBlock: ParentComponent = (props) => {
     let scale = 1;
     const full_width = DESIGN_BLOCK_WIDTH + 20; // DESIGN_BLOCK_WIDTH + parent PADDING
     if (window.innerWidth < full_width)
-      scale = Math.min(window.innerWidth / full_width, window.innerHeight / height);  
-    
+      scale = Math.min(
+        window.innerWidth / full_width,
+        window.innerHeight / height,
+      );
+
     return scale;
   };
 
@@ -22,17 +25,17 @@ export const AdaptiveBlock: ParentComponent = (props) => {
   };
 
   onMount(() => {
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
   });
 
   onCleanup(() => {
-    window.removeEventListener('resize', handleResize);
+    window.removeEventListener("resize", handleResize);
   });
 
   return (
     <div class="bottom-menu-wrapper">
-
-      <div class="bottom-menu-resizer"
+      <div
+        class="bottom-menu-resizer"
         style={{
           width: `${window.innerWidth < DESIGN_BLOCK_WIDTH ? DESIGN_BLOCK_WIDTH + "px" : "100%"}`,
           height: `${height}`,
@@ -42,7 +45,6 @@ export const AdaptiveBlock: ParentComponent = (props) => {
       >
         {props.children}
       </div>
-
     </div>
   );
-}
+};
