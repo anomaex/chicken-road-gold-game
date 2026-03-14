@@ -1,0 +1,22 @@
+/*
+   src/ui/components/bottom/AdaptiveBottomMenu.css
+*/
+
+.bottom-menu-wrapper {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box; /* for padding, if broke width 100% */
+    
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* stick to bottom, if height wrap changed */
+}
+
+.bottom-menu-resizer {
+    display: flex;
+    transform-origin: bottom center;
+    justify-content: center; 
+}

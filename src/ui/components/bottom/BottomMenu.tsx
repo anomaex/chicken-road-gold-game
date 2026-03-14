@@ -6,7 +6,7 @@ import { createSignal, Show, For } from "solid-js";
 import "./BottomMenu.css";
 
 import { store } from "../../../shared/store";
-import { AdaptiveBlock } from "./AdaptiveBlock";
+import { AdaptiveBottomMenu } from "./AdaptiveBottomMenu";
 
 export const BottomMenu = () => {
   const [isOpen, setIsOpen] = createSignal(false);
@@ -107,7 +107,7 @@ export const BottomMenu = () => {
   return (
     <Show when={store.state.winBetCount <= 0}>
       <div class="bottom-shadow-gradient" />
-      <AdaptiveBlock>
+      <AdaptiveBottomMenu>
         <div class="bottom-menu-bar">
           <div class="balance">
             <div class="label">BALANCE</div>
@@ -222,7 +222,7 @@ export const BottomMenu = () => {
             </div>
           </div>
         </div>
-      </AdaptiveBlock>
+      </AdaptiveBottomMenu>
     </Show>
   );
 };
