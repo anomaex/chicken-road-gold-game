@@ -10,59 +10,63 @@ export function initInput() {
   app.stage.eventMode = "static";
   app.stage.hitArea = app.screen; // hit area all screen
 
-  //let startX = 0;
-  //let startY = 0;
-  //let startTime = 0;
+  let isPointerDown = false;
+  let startX = 0;
+  let startY = 0;
+  let startTime = 0;
 
   // Настройки чувствительности
-  //const CLICK_THRESHOLD = 10; // Макс расстояние в пикселях для клика
-  //const TIME_THRESHOLD = 250; // Макс время в мс для клика
+  const CLICK_THRESHOLD = 10; // Макс расстояние в пикселях для клика
+  const TIME_THRESHOLD = 250; // Макс время в мс для клика
+
+  const DRAG_THRESHOLD = 5;
 
   app.stage.on("pointerdown", (e: FederatedPointerEvent) => {
     if (e.button !== 0) return; // 0 - it's touch or right mouse click
     if (store.state.inputBlock) return;
 
-    store.camera.isDragging = true;
+    store.camera.isDragging = false;
     store.camera.lastPointerX = e.global.x;
 
-    //startX = e.global.x;
-    //startY = e.global.y;
-    //startTime = Date.now();
+    isPointerDown = true;
+    startX = e.global.x;
+    startY = e.global.y;
+    startTime = Date.now();
   });
 
   app.stage.on("pointermove", (e: FederatedPointerEvent) => {
     if (store.state.inputBlock) return;
-    if (!store.camera.isDragging) return;
+    if (!isPointerDown) return;
 
-    const deltaX = e.global.x - store.camera.lastPointerX;
-    const scale = store.camera.baseScale * store.camera.zoom;
+    if (!store.camera.isDragging) {
+      const moveX = Math.abs(e.global.x - startX);
+      const moveY = Math.abs(e.global.y - startY);
 
-    // Если мы тянем мир вправо (deltaX > 0),
-    // значит "точка фокуса" камеры едет ВЛЕВО по миру.
-    store.camera.centerX -= deltaX / scale;
+      // Если курсор сдвинулся дальше порога
+      if (moveX > DRAG_THRESHOLD || moveY > DRAG_THRESHOLD) {
+        store.camera.isDragging = true;
+        store.camera.lastPointerX = e.global.x;
+      }
+    }
 
-    store.camera.lastPointerX = e.global.x;
+    if (store.camera.isDragging) {
+      const deltaX = e.global.x - store.camera.lastPointerX;
+      const scale = store.camera.baseScale * store.camera.zoom;
+
+      store.camera.centerX -= deltaX / scale;
+      store.camera.lastPointerX = e.global.x;
+    }
   });
 
   // Сlick recognition
   const endDrag = (/*e: FederatedPointerEvent*/) => {
     if (store.state.inputBlock) return;
+    if (!isPointerDown) return;
+    isPointerDown = false;
 
-    if (!store.camera.isDragging) return;
-
-    /*
-    const dist = Math.sqrt(
-      Math.pow(e.global.x - startX, 2) + Math.pow(e.global.y - startY, 2),
-    );
-
-    const duration = Date.now() - startTime;
-
-    // Check click or slide move
-    if (dist < CLICK_THRESHOLD && duration < TIME_THRESHOLD) {
-      store.chicken.jump();
-    }*/
-
-    store.camera.isDragging = false;
+    setTimeout(() => {
+      store.camera.isDragging = false;
+    }, 50);
   };
 
   app.stage.on("pointerup", () => endDrag());

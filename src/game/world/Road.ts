@@ -86,8 +86,11 @@ export class Road extends Container {
       ],
     });
 
-    this.coinBronzeContainer.on("pointerdown", () => {
-      store.chicken?.jump();
+    this.coinBronzeContainer.on("pointertap", (e) => {
+      if (e.button !== 0) return;
+      if (store.state.inputBlock) return;
+      if (store.camera.isDragging) return;
+      this.handleBronzeCoinClick();
     });
 
     // Gold coint
@@ -207,6 +210,12 @@ export class Road extends Container {
         this.spawnCar();
       }
     }
+  }
+
+  private handleBronzeCoinClick() {
+    if (store.state.inputBlock) return;
+    if (!store.state.isGameStarted) return;
+    store.chicken?.jump();
   }
 
   //#region Car
