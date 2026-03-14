@@ -22,7 +22,7 @@ export const AdaptiveBottomMenu: ParentComponent = (props) => {
       scale = Math.min(windowWidth / full_width, windowHeight / height);
     }
 
-    if (isLandscape) {
+    if (isLandscape && windowHeight < full_width) {
       scale = scale * 0.7;
     }
 
