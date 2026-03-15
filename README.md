@@ -2,10 +2,7 @@
 
 [https://anomaex.github.io/chicken-road-gold-game/](https://anomaex.github.io/chicken-road-gold-game/)
 
-Before npm run build for not forget:
-``
-npm run lint -- --fix
-``
+Before `npm run build` not forget: `npm run lint -- --fix`
 
 Requirements:
 ```
@@ -17,14 +14,15 @@ npm install @esotericsoftware/spine-pixi-v8
 ```
 
 #### In future:
-- Better change audio library fromv @pixi/sound to howler.js(Audio Sprites base64 overhead, library size, for ui solidjs).
+- @pixi/sound use Audio Sprites base64.
+- check switch to bun.
 - Add an API to process requests from the server.
 
-##### All images from source resizable and compressed:
+#### All images from source resizable and compressed:
 - max 1280 height, because the level.
 - export images from source to .webp(lighter size than .png), use compress, сompare quality and choose.
 
-##### Alls audio used to convert from source to new .mp3 files, prefer:
+#### Alls audio used to convert from source to new .mp3 files or webm(check in ad service if support), prefer:
 - Mono, quality 100%, or stereo if mono broke the sample from source.
 - Sample rate, sound 11025 Hz, 22050 Hz(prefer) and more.
 - 16 bit bit depth.
