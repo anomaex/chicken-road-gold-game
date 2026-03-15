@@ -33,6 +33,9 @@ import carDriveAudio from "./audio/carDrive.mp3";
 import winAudio from "./audio/win.mp3";
 import cashoutAudio from "./audio/cashout.mp3";
 
+import chickenAtlasAnim from "./animation/chiken.atlas?url";
+import chickenDataAnim from "./animation/chiken.json?url";
+
 export const manifest: AssetsManifest = {
   bundles: [
     // Images
@@ -83,6 +86,13 @@ export const manifest: AssetsManifest = {
         { alias: "carDriveSound", src: carDriveAudio },
         { alias: "winSound", src: winAudio },
         { alias: "cashoutSound", src: cashoutAudio },
+      ],
+    },
+    {
+      name: "animations",
+      assets: [
+        { alias: "chickenDataAnim", src: chickenDataAnim },
+        { alias: "chickenAtlasAnim", src: chickenAtlasAnim },
       ],
     },
   ],

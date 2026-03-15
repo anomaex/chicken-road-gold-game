@@ -1,0 +1,239 @@
+chiken.png
+size:1333,523
+filter:Linear,Linear
+$
+bounds:796,121,44,60
+11111122211111
+bounds:1131,212,61,50
+rotate:90
+1111122222333
+bounds:504,68,105,121
+rotate:90
+1111122222333123
+bounds:1183,206,104,120
+offsets:0,0,105,121
+rotate:90
+1111122223344
+bounds:1131,132,49,78
+1111122323232
+bounds:322,299,170,222
+offsets:0,0,172,223
+11112222211
+bounds:852,142,104,101
+11112222211234
+bounds:958,141,93,102
+offsets:2,1,97,105
+111122223333444
+bounds:1258,85,34,42
+offsets:0,1,35,43
+1112223333434
+bounds:1126,92,38,41
+offsets:1,0,39,42
+rotate:90
+121212121212211
+bounds:627,40,74,38
+123122331112334
+bounds:1188,312,126,116
+offsets:2,1,129,124
+2211132333
+bounds:550,2,64,54
+offsets:1,1,65,55
+rotate:90
+22212221111
+bounds:2,86,234,205
+offsets:12,10,253,218
+22221212121221
+bounds:2,293,318,228
+22231113344
+bounds:493,2,64,55
+offsets:0,1,65,56
+rotate:90
+3344555656556
+bounds:852,245,29,160
+rotate:90
+566778878990
+bounds:854,430,91,232
+rotate:90
+778887899898
+bounds:1305,193,26,117
+988998675654
+bounds:1088,430,91,232
+rotate:90
+Group 1000006385 6
+bounds:2,26,58,218
+offsets:1,2,61,221
+rotate:90
+Group 1000006386
+bounds:704,183,46,139
+rotate:90
+Layer 10
+bounds:1316,316,10,15
+offsets:1,1,12,18
+rotate:90
+Layer 11
+bounds:703,2,49,68
+offsets:2,1,52,70
+Layer 12
+bounds:1040,26,41,63
+Layer 1212
+bounds:850,9,65,62
+offsets:7,1,77,65
+Layer 13
+bounds:1028,91,51,48
+Layer 14
+bounds:1053,145,98,76
+rotate:90
+Layer 15
+bounds:627,80,93,76
+offsets:1,1,95,78
+rotate:90
+Layer 16
+bounds:954,91,48,72
+rotate:90
+Layer 17
+bounds:982,28,61,56
+rotate:90
+Layer 18
+bounds:1182,129,94,75
+offsets:1,2,96,78
+Layer 19
+bounds:754,2,48,68
+offsets:1,1,51,70
+Layer 20
+bounds:494,349,181,172
+offsets:0,0,186,172
+Layer 22
+bounds:2,5,56,19
+Layer 23
+bounds:1014,245,54,29
+Layer 24
+bounds:1316,388,40,15
+rotate:90
+Layer 25
+bounds:1083,2,36,24
+Layer 3
+bounds:1198,36,57,43
+offsets:1,1,59,46
+Layer 4
+bounds:1299,18,28,34
+offsets:1,1,30,36
+Layer 45555555
+bounds:1294,54,36,37
+offsets:1,0,38,38
+rotate:90
+Layer 5
+bounds:917,91,35,49
+offsets:1,1,38,51
+Layer 5 copy
+bounds:1294,92,37,37
+Layer 533333333
+bounds:677,349,7,7
+offsets:1,0,9,8
+Layer 55555555
+bounds:1316,328,13,58
+offsets:2,0,17,58
+Layer 6
+bounds:1083,28,55,61
+offsets:1,1,57,63
+Layer 6 copy
+bounds:1198,81,58,46
+Layer 655555555
+bounds:1169,92,35,21
+offsets:1,1,37,23
+rotate:90
+Layer 7
+bounds:668,4,34,33
+rotate:90
+Layer 8
+bounds:1081,91,52,43
+rotate:90
+Layer 9
+bounds:606,48,12,18
+offsets:2,1,15,20
+beak-down
+bounds:1258,54,34,29
+beak-up
+bounds:799,76,41,43
+crest
+bounds:1011,276,90,69
+gold/121212
+bounds:842,73,67,73
+rotate:90
+gold/12121212
+bounds:1022,347,81,164
+rotate:90
+gold/12121212121212
+bounds:854,352,166,76
+gold/1212121212121212
+bounds:804,2,44,69
+gold/Ellipse 2061
+bounds:60,2,21,22
+gold/Ellipse 2062
+bounds:361,95,17,20
+gold/Group 1410132252
+bounds:380,5,111,110
+gold/Group 1410132253
+bounds:504,175,172,126
+rotate:90
+gold/Group 1410132256
+bounds:1070,245,28,41
+offsets:0,0,28,46
+rotate:90
+gold/Group 1410132258
+bounds:1103,275,78,70
+gold/Group 1410132264
+bounds:606,2,36,60
+offsets:19,11,73,82
+rotate:90
+gold/Group 1410132265
+bounds:632,188,159,70
+offsets:0,3,159,74
+rotate:90
+gold/Group 1410132274
+bounds:705,72,92,41
+gold/Group 1410132275
+bounds:704,231,146,125
+offsets:0,13,146,138
+gold/Group 1410132279
+bounds:705,115,89,66
+offsets:13,17,118,102
+gold/Group 1410132280
+bounds:852,276,74,157
+rotate:90
+gold/Lose chicken clothes
+bounds:238,91,200,121
+rotate:90
+gold/Vector
+bounds:677,358,175,163
+gold/Vector 2435
+bounds:222,55,29,14
+rotate:90
+mouth-inside
+bounds:1198,6,28,30
+offsets:1,1,30,32
+rotate:90
+shadow
+bounds:361,117,180,141
+offsets:1,1,182,143
+rotate:90
+wing-down
+bounds:238,2,87,68
+offsets:1,1,89,70
+rotate:90
+wing-up
+bounds:308,3,86,70
+offsets:1,1,88,72
+rotate:90
+yazik
+bounds:1257,18,34,40
+rotate:90
+Слой 121 копия 3
+bounds:1278,131,60,53
+offsets:0,1,61,54
+rotate:90
+Слой 121 копия 7
+bounds:1140,29,61,56
+rotate:90
+Слой 204
+bounds:917,29,63,60
+offsets:1,1,65,62

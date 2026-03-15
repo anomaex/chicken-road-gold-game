@@ -4,6 +4,7 @@
 
 import { Container, Sprite, Assets, TextStyle, Text, Graphics } from "pixi.js";
 import { Tween, Easing, Group } from "@tweenjs/tween.js";
+import { Spine } from "@esotericsoftware/spine-pixi-v8";
 
 import { store } from "../../shared/store";
 import { moveCameraTo, shakeCameraX } from "../systems/camera";
@@ -25,10 +26,9 @@ export class Chicken extends Container {
     offsetY: 66, // for correct sprite position
   };
 
-  private scoreContainer!: Container;
+  private chickenSpine: Spine;
 
-  public chickenStaticSprite: Sprite;
-  private chickenRunOverSprite: Sprite;
+  private scoreContainer!: Container;
 
   private scoreText!: Text;
   private scoreMulti = 1;
@@ -53,20 +53,15 @@ export class Chicken extends Container {
 
     this.jumpPositionX = this.startPoint.x;
 
-    this.chickenStaticSprite = new Sprite({
-      texture: Assets.get("chickenStatic"),
-      anchor: { x: 0.5, y: 1 },
-      y: this.startPoint.offsetY,
-      parent: this,
+    this.chickenSpine = Spine.from({
+      skeleton: "chickenDataAnim",
+      atlas: "chickenAtlasAnim",
+      scale: 0.62,
     });
+    this.chickenSpine.state.setAnimation(0, "idle", true);
 
-    this.chickenRunOverSprite = new Sprite({
-      texture: Assets.get("chickenRunOver"),
-      anchor: { x: 0.5, y: 1 },
-      y: this.startPoint.offsetY,
-      visible: false,
-      parent: this,
-    });
+    this.chickenSpine.y = this.startPoint.offsetY;
+    this.addChild(this.chickenSpine);
 
     this.zIndex = 2;
 
@@ -138,8 +133,7 @@ export class Chicken extends Container {
         if (this.isCollisionHit) {
           this.isRunOver = true;
 
-          this.chickenStaticSprite.visible = false;
-          this.chickenRunOverSprite.visible = true;
+          this.chickenSpine.state.setAnimation(0, "death", false);
 
           playCarDriveAudio();
           playRunOverAudio();
@@ -183,12 +177,13 @@ export class Chicken extends Container {
           // Start finish event
           setTimeout(() => {
             this.finish();
-          }, 300);
+          }, 100);
 
           return;
         } else {
           const nextRoad = store.bg.roads[nextRoadIndex];
           if (nextRoad) nextRoad.setBacklightScore(true);
+          this.chickenSpine.state.addAnimation(0, "idle", true);
           this.visibleScore(true);
         }
 
@@ -215,6 +210,11 @@ export class Chicken extends Container {
     nextRoad.visibleCoinBronze(false);
 
     this.visibleScore(false);
+
+    const track = this.chickenSpine.state.setAnimation(0, "jump", false);
+    // Ускоряем КОНКРЕТНО ЭТОТ прыжок в 2 раза
+    track.trackTime = 0.2;
+    track.timeScale = 1.4;
 
     playJumpAudio();
 
@@ -273,33 +273,23 @@ export class Chicken extends Container {
 
   //#region Finish
   private finish() {
-    const point = store.bg.finish.getFinishPoint();
-    new Tween(this, store.tweenGroup)
-      .to(point, 350)
-      .easing(Easing.Quadratic.InOut)
-      .onStart(() => {
-        moveCameraTo(point.x, point.y, 800);
-      })
-      .onComplete(() => {
-        setTimeout(() => {
-          this.jumpToGold();
-        }, 300);
-      })
-      .start();
-  }
+    const pointGold = store.bg.finish.getGoldPoint();
+    moveCameraTo(pointGold.x, pointGold.y, 500);
 
-  private jumpToGold() {
-    const point = store.bg.finish.getGoldPoint();
+    const pointFinish = store.bg.finish.getFinishPoint();
+
     new Tween(this, store.tweenGroup)
-      .to(point, 350)
+      .to({ y: pointFinish.y }, 350)
       .easing(Easing.Quadratic.InOut)
-      .onStart(() => {
-        moveCameraTo(point.x, point.y, 800);
-      })
-      .onComplete(() => {
-        this.visibleWinWindow(true);
-      })
       .start();
+
+    const track = this.chickenSpine.state.setAnimation(0, "win", false);
+
+    track.listener = {
+      complete: () => {
+        this.visibleWinWindow(true);
+      },
+    };
   }
 
   private visibleWinWindow(enable: boolean) {
@@ -389,8 +379,7 @@ export class Chicken extends Container {
     this.x = this.startPoint.x;
     this.y = this.startPoint.y;
 
-    this.chickenRunOverSprite.visible = false;
-    this.chickenStaticSprite.visible = true;
+    this.chickenSpine.state.setAnimation(0, "idle", true);
 
     store.state.currentBetCount = 0;
     store.state.winBetCount = 0;

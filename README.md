@@ -1,5 +1,7 @@
 # Chicken Road Gold game
 
+[https://anomaex.github.io/chicken-road-gold-game/](https://anomaex.github.io/chicken-road-gold-game/)
+
 Before npm run build for not forget:
 ``
 npm run lint -- --fix
@@ -11,6 +13,7 @@ npm install @tweenjs/tween.js
 npm install @pixi/sound
 npm install solid-js
 npm install -D vite-plugin-solid
+npm install @esotericsoftware/spine-pixi-v8
 ```
 
 #### In future:
