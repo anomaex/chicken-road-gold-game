@@ -55,14 +55,7 @@ export class Game {
 
   private async loadAssets() {
     await Assets.init({ manifest: manifest });
-    await Assets.loadBundle([
-      "bg",
-      "chicken",
-      "road",
-      "decorations",
-      "audio",
-      "animations",
-    ]); // pixijs load assets to self cache
+    await Assets.loadBundle(["bg", "chicken", "road", "decorations", "audio"]); // pixijs load assets to self cache
   }
 
   private update(ticker: Ticker) {

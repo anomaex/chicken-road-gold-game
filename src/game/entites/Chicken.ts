@@ -4,6 +4,7 @@
 
 import { Container, Sprite, Assets, TextStyle, Text, Graphics } from "pixi.js";
 import { Tween, Easing, Group } from "@tweenjs/tween.js";
+
 import { Spine } from "@esotericsoftware/spine-pixi-v8";
 
 import { store } from "../../shared/store";
@@ -18,6 +19,10 @@ import {
 import { resizeSpriteToWinCenter } from "../systems/resize";
 import { mraidSystem } from "../systems/mraid";
 
+import chickenJson from "../assets/animation/chiken.json?raw";
+import atlasRaw from "../assets/animation/chiken.atlas?raw";
+import chickenPng from "../assets/animation/chiken.png?inline";
+
 export class Chicken extends Container {
   public startPoint = {
     // In worldContainer coords
@@ -26,7 +31,7 @@ export class Chicken extends Container {
     offsetY: 66, // for correct sprite position
   };
 
-  private chickenSpine: Spine;
+  private chickenSpine!: Spine;
 
   private scoreContainer!: Container;
 
@@ -53,15 +58,49 @@ export class Chicken extends Container {
 
     this.jumpPositionX = this.startPoint.x;
 
-    this.chickenSpine = Spine.from({
-      skeleton: "chickenDataAnim",
-      atlas: "chickenAtlasAnim",
-      scale: 0.62,
-    });
-    this.chickenSpine.state.setAnimation(0, "idle", true);
+    setTimeout(async () => {
+      function toBase64(str: string): string {
+        const bytes = new TextEncoder().encode(str);
+        const binary = Array.from(bytes)
+          .map((b) => String.fromCharCode(b))
+          .join("");
+        return btoa(binary);
+      }
 
-    this.chickenSpine.y = this.startPoint.offsetY;
-    this.addChild(this.chickenSpine);
+      const texture = await Assets.load({
+        alias: "chickenTexture",
+        parser: "loadTextures",
+        src: chickenPng,
+      });
+
+      Assets.add({
+        alias: "spineboyAtlas",
+        parser: "spineTextureAtlasLoader",
+        src: "data:text/plain;base64," + toBase64(atlasRaw),
+        data: { images: { "chiken.png": texture.source } },
+      });
+
+      Assets.add({
+        alias: "spineboyData",
+        parser: "loadJson",
+        src: "data:application/json;base64," + toBase64(chickenJson),
+      });
+
+      await Assets.load(["spineboyData", "spineboyAtlas"]);
+
+      await Assets.load(["spineboyData", "spineboyAtlas"]);
+
+      this.chickenSpine = Spine.from({
+        skeleton: "spineboyData",
+        atlas: "spineboyAtlas",
+        scale: 0.62,
+      });
+
+      this.chickenSpine.state.setAnimation(0, "idle", true);
+
+      this.chickenSpine.y = this.startPoint.offsetY;
+      this.addChild(this.chickenSpine);
+    }, 1);
 
     this.zIndex = 2;
 
